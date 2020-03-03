@@ -6,7 +6,13 @@
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
+        {% block header %}{{ render(controller(
+            'App\\Controller\\HeaderController::renderHeader'
+        )) }}{% endblock %}
         {% block body %}{% endblock %}
+        {% block footer %}{{ render(controller(
+            'App\\Controller\\FooterController::renderFooter'
+        )) }}{% endblock %}
         {% block javascripts %}{% endblock %}
     </body>
 </html>
