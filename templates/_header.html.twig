@@ -11,4 +11,9 @@
         <li><a href="{{ menuLink }}">{{ menuItem }}</a></li>
     {% endfor %}
     </ul>
+    {% if app.user %}
+    <h4>You are logged in! You can <a href="{{ logout_link }}">Logout!</a></h4>
+    {% else %}
+    <h4>You are NOT logged in! You can <a href="{{ login_link }}">Log in!</a></h4>
+    {% endif %}
 </div>
