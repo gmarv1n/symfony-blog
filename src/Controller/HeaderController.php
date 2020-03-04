@@ -15,15 +15,17 @@ class HeaderController extends AbstractController
     {
         $mainMenu = $this->generateMainMenuLinks();
 
-        // generating login, logout links
+        // generating login, logout and register links
         $loginLink = $this->generateUrl('site_login');
         $logoutLink = $this->generateUrl('site_logout');
+        $registerLink = $this->generateUrl('site_register');
 
         return $this->render('_header.html.twig', [
             'mainMenu' => $mainMenu, 
             'controller_header' => 'HeaderController',
             'login_link' => $loginLink,
-            'logout_link' => $logoutLink
+            'logout_link' => $logoutLink,
+            'register_link' => $registerLink
         ]);
     }
 
@@ -35,7 +37,7 @@ class HeaderController extends AbstractController
         $mainMenuLinks = [];
         $mainMenuLinks["About"] = $this->generateUrl('about_page');
         $mainMenuLinks["Contacts"] = $this->generateUrl('contacts_page');
-        $mainMenuLinks["Blog"] = "something";
+        $mainMenuLinks["Blog"] = $this->generateUrl('blog_post_index');
         return $mainMenuLinks; 
     }
 
