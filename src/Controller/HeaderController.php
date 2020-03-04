@@ -14,8 +14,16 @@ class HeaderController extends AbstractController
     public function renderHeader()
     {
         $mainMenu = $this->generateMainMenuLinks();
+
+        // generating login, logout links
+        $loginLink = $this->generateUrl('site_login');
+        $logoutLink = $this->generateUrl('site_logout');
+
         return $this->render('_header.html.twig', [
-            'mainMenu' => $mainMenu, 'controller_header' => 'HeaderController'
+            'mainMenu' => $mainMenu, 
+            'controller_header' => 'HeaderController',
+            'login_link' => $loginLink,
+            'logout_link' => $logoutLink
         ]);
     }
 
@@ -30,4 +38,5 @@ class HeaderController extends AbstractController
         $mainMenuLinks["Blog"] = "something";
         return $mainMenuLinks; 
     }
+
 }
