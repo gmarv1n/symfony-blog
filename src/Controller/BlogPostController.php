@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\BlogPost;
 use App\Form\BlogPostType;
 use App\Repository\BlogPostRepository;
+use App\Repository\CommentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

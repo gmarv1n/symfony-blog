@@ -19,6 +19,7 @@
                 <th>Date</th>
                 <th>Author_name</th>
                 <th>Likes_counter</th>
+                <th>Comments_count</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -36,6 +37,7 @@
                 <td>{{ blog_post.date ? blog_post.date|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ blog_post.authorName }}</td>
                 <td>{{ blog_post.likesCounter }}</td>
+                <td>{{ blog_post.commentsCount }}</td>
                 <td>
                     <a href="{{ path('blog_post_show', {'id': blog_post.id}) }}">show</a>
                     <a href="{{ path('blog_post_edit', {'id': blog_post.id}) }}">edit</a>
@@ -43,7 +45,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="12">no records found</td>
+                <td colspan="13">no records found</td>
             </tr>
         {% endfor %}
         </tbody>

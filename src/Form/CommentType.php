@@ -2,34 +2,28 @@
 
 namespace App\Form;
 
-use App\Entity\BlogPost;
+use App\Entity\Comment;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class BlogPostType extends AbstractType
+class CommentType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title')
-            ->add('slug')
-            ->add('image_name')
-            ->add('short_content')
-            ->add('content')
-            ->add('category')
-            ->add('tags')
+            ->add('user_id')
+            ->add('post_id')
+            ->add('comment')
+            ->add('is_approved')
             ->add('date')
-            ->add('author_name')
-            ->add('likes_counter')
-            ->add('comments_count')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => BlogPost::class,
+            'data_class' => Comment::class,
         ]);
     }
 }

@@ -66,6 +66,11 @@ class BlogPost
      */
     private $likes_counter;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $comments_count;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -187,6 +192,18 @@ class BlogPost
     public function setLikesCounter(int $likes_counter): self
     {
         $this->likes_counter = $likes_counter;
+
+        return $this;
+    }
+
+    public function getCommentsCount(): ?int
+    {
+        return $this->comments_count;
+    }
+
+    public function setCommentsCount(int $comments_count): self
+    {
+        $this->comments_count = $comments_count;
 
         return $this;
     }
