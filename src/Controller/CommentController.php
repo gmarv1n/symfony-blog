@@ -31,7 +31,7 @@ class CommentController extends AbstractController
      */
     public function getCommentsListByPost(int $id, CommentRepository $commentRepository): Response
     {
-        return $this->render('comment/index.html.twig', [
+        return $this->render('comment/_comment_list_in_post.html.twig', [
             'comments' => $commentRepository->findCommentsByPostId($id),
         ]);
     }
