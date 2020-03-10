@@ -29,10 +29,10 @@ class CommentController extends AbstractController
      * @Route("/by_post", name="comment_index_for_post", methods={"GET"})
      * This method might determ what is the id of post and return all of comments for it
      */
-    public function getCommentsListByPost(int $id, CommentRepository $commentRepository): Response
+    public function getCommentsListByPost(string $postSlug, CommentRepository $commentRepository): Response
     {
         return $this->render('comment/_comment_list_in_post.html.twig', [
-            'comments' => $commentRepository->findCommentsByPostId($id),
+            'comments' => $commentRepository->findCommentsByPostSlug($postSlug),
         ]);
     }
 

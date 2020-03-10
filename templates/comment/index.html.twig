@@ -9,8 +9,8 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>User_id</th>
-                <th>Post_id</th>
+                <th>User_name</th>
+                <th>Post_slug</th>
                 <th>Comment</th>
                 <th>Is_approved</th>
                 <th>Date</th>
@@ -21,8 +21,8 @@
         {% for comment in comments %}
             <tr>
                 <td>{{ comment.id }}</td>
-                <td>{{ comment.userId }}</td>
-                <td>{{ comment.postId }}</td>
+                <td>{{ comment.userName }}</td>
+                <td>{{ comment.postSlug }}</td>
                 <td>{{ comment.comment }}</td>
                 <td>{{ comment.isApproved ? 'Yes' : 'No' }}</td>
                 <td>{{ comment.date ? comment.date|date('Y-m-d H:i:s') : '' }}</td>

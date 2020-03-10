@@ -66,6 +66,6 @@
 
     {# Summoning the comments list #}
     {{ render(controller(
-            'App\\Controller\\CommentController::getCommentsListByPost', {id: blog_post.id}
+            'App\\Controller\\CommentController::getCommentsListByPost', {postSlug: blog_post.slug}
         )) }}
 {% endblock %}

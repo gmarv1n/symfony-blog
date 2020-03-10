@@ -24,11 +24,11 @@ class CommentRepository extends ServiceEntityRepository
       * This method returns array of comments for blogpost. Maybe...
       */
     
-    public function findCommentsByPostId($value)
+    public function findCommentsByPostSlug($postSlug)
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.post_id = :val')
-            ->setParameter('val', $value)
+            ->andWhere('c.post_slug = :val')
+            ->setParameter('val', $postSlug)
             ->orderBy('c.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()

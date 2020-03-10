@@ -17,14 +17,14 @@ class Comment
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=255)
      */
-    private $user_id;
+    private $user_name;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=255)
      */
-    private $post_id;
+    private $post_slug;
 
     /**
      * @ORM\Column(type="text")
@@ -46,26 +46,26 @@ class Comment
         return $this->id;
     }
 
-    public function getUserId(): ?int
+    public function getUserName(): ?string
     {
-        return $this->user_id;
+        return $this->user_name;
     }
 
-    public function setUserId(int $user_id): self
+    public function setUserName(string $user_name): self
     {
-        $this->user_id = $user_id;
+        $this->user_name = $user_name;
 
         return $this;
     }
 
-    public function getPostId(): ?int
+    public function getPostSlug(): ?string
     {
-        return $this->post_id;
+        return $this->post_slug;
     }
 
-    public function setPostId(int $post_id): self
+    public function setPostSlug(string $post_slug): self
     {
-        $this->post_id = $post_id;
+        $this->post_slug = $post_slug;
 
         return $this;
     }
@@ -105,4 +105,5 @@ class Comment
 
         return $this;
     }
+
 }
