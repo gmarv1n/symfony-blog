@@ -17,8 +17,8 @@ class AppFixtures extends Fixture
          */
 
         $date = new DateTime('2020-06-03');
-        
-                
+
+
         // Putting some random data for blog posts
         // Post 1
         $blogPost1 = new BlogPost();

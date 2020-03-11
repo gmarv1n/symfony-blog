@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Controller\LikeConnectionsController;
 
 /**
  * @Route("/blog")
@@ -90,6 +91,17 @@ class BlogPostController extends AbstractController
             $entityManager->flush();
         }
 
+        return $this->redirectToRoute('blog_post_index');
+    }
+
+    /**
+     * @Route("/{id}/like", name="blog_post_like", methods={"GET"})
+     */
+    public function like(BlogPost $blogPost): Response
+    {
+        $user = $this->getUser();
+        $likeConnection = new LikeConnectionsController();
+        $likeConnection->likeThePost($blogPost, $user);
         return $this->redirectToRoute('blog_post_index');
     }
 }
