@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\LikeConnections;
+use App\Entity\LikeConnection;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
- * @method LikeConnections|null find($id, $lockMode = null, $lockVersion = null)
- * @method LikeConnections|null findOneBy(array $criteria, array $orderBy = null)
- * @method LikeConnections[]    findAll()
- * @method LikeConnections[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method LikeConnection|null find($id, $lockMode = null, $lockVersion = null)
+ * @method LikeConnection|null findOneBy(array $criteria, array $orderBy = null)
+ * @method LikeConnection[]    findAll()
+ * @method LikeConnection[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class LikeConnectionsRepository extends ServiceEntityRepository
+class LikeConnectionRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, LikeConnections::class);
+        parent::__construct($registry, LikeConnection::class);
     }
 
     // /**
-    //  * @return LikeConnections[] Returns an array of LikeConnections objects
+    //  * @return LikeConnection[] Returns an array of LikeConnection objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class LikeConnectionsRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?LikeConnections
+    public function findOneBySomeField($value): ?LikeConnection
     {
         return $this->createQueryBuilder('l')
             ->andWhere('l.exampleField = :val')
