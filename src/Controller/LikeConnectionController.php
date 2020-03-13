@@ -2,18 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\BlogPost;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\LikeConnection;
-use App\Repository\LikeConnectionRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\BlogPost;
-use App\Entity\User;
+use App\Repository\BlogPostRepository;
 use Symfony\Component\Routing\Annotation\Route;
 
 class LikeConnectionController extends AbstractController
 {
     /**
-     * @Route("/create-like/{postSlug}", name="like_the_post")
+     * @Route("/create-like/{postSlug}", name="create_like")
      */
     public function likeThePost($postSlug)
     {
@@ -26,11 +24,17 @@ class LikeConnectionController extends AbstractController
         $likeConnection->setUserName($user->getUsername());
 
         $entityManager = $this->getDoctrine()->getManager();
-
-        //$entityManager = $this->container->get('doctrine')->getManager();
         $entityManager->persist($likeConnection);
         $entityManager->flush();
 
-        return $this->redirectToRoute('blog_post_index');
+        $likedPostArr = $this->getDoctrine()
+                                   ->getRepository(BlogPost::class)
+                                   ->findByPostSlugField($postSlug);
+
+        $likedPostId = $likedPostArr[0]->getId();
+        
+
+        return $this->redirectToRoute('blog_post_show', ['id' => $likedPostId]);
+        //return $this->redirectToRoute('blog_post_index');
     }
 }

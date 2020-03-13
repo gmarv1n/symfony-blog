@@ -19,6 +19,21 @@ class BlogPostRepository extends ServiceEntityRepository
         parent::__construct($registry, BlogPost::class);
     }
 
+    /**
+     * @return BlogPost[] Returns an array of BlogPost objects
+     */
+    public function findByPostSlugField($slug)
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.slug = :slug')
+            ->setParameter('slug', $slug)
+            ->orderBy('b.id', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return BlogPost[] Returns an array of BlogPost objects
     //  */
