@@ -20,17 +20,15 @@ class BlogPostRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return BlogPost[] Returns an array of BlogPost objects
+     * @return BlogPost[] Returns a BlogPost object
      */
     public function findByPostSlugField($slug)
     {
         return $this->createQueryBuilder('b')
             ->andWhere('b.slug = :slug')
             ->setParameter('slug', $slug)
-            ->orderBy('b.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
-            ->getResult()
+            ->getOneOrNullResult()
         ;
     }
 

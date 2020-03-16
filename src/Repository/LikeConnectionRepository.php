@@ -19,6 +19,44 @@ class LikeConnectionRepository extends ServiceEntityRepository
         parent::__construct($registry, LikeConnection::class);
     }
 
+    /**
+      * @return LikeConnection Returns a LikeConnection object
+      */
+    
+    public function getLikeConnection($postSlug, $userName)
+    {
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.post_slug = :postSlug')
+            ->andWhere('l.user_name = :userName')
+            ->setParameter('postSlug', $postSlug)
+            ->setParameter('userName', $userName)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    /**
+      * @return true if like connection with argument fields extists
+      */
+    
+      public function isLikeConnectionExtists($postSlug, $userName) : Bool
+      {
+        $likeConnection = $this->createQueryBuilder('l')
+                               ->andWhere('l.post_slug = :postSlug')
+                               ->andWhere('l.user_name = :userName')
+                               ->setParameter('postSlug', $postSlug)
+                               ->setParameter('userName', $userName)
+                               ->getQuery()
+                               ->getOneOrNullResult();
+        if ( $likeConnection != null ) {
+            return true;
+        } else {
+            return false;
+        }
+          
+      }
+    
+
     // /**
     //  * @return LikeConnection[] Returns an array of LikeConnection objects
     //  */
