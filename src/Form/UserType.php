@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Form;
+
+use App\Entity\User;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+
+class UserType extends AbstractType
+{   
+    private const ROLE_ADMIN = 'ROLE_ADMIN';
+    private const ROLE_AUTHOR = 'ROLE_AUTHOR';
+    private const ROLE_USER = 'ROLE_USER';
+
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('email')
+            ->add('userNickName')
+            ->add('roles', ChoiceType::class, [
+                'choices'  => [
+                    'Administrator' => UserType::ROLE_ADMIN,
+                    'Author' => UserType::ROLE_AUTHOR,
+                    'User' => null,
+                    ]             
+                ],
+            )
+            ->add('password')
+        ;
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'data_class' => User::class,
+        ]);
+    }
+}
