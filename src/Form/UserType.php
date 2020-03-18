@@ -20,11 +20,8 @@ class UserType extends AbstractType
             ->add('email')
             ->add('userNickName')
             ->add('roles', ChoiceType::class, [
-                'choices'  => [
-                    'Administrator' => UserType::ROLE_ADMIN,
-                    'Author' => UserType::ROLE_AUTHOR,
-                    'User' => null,
-                    ]             
+                'multiple' => true,
+                'choices'  => $rolesChoices = $this->getRolesArray()            
                 ],
             )
             ->add('password')
@@ -36,5 +33,14 @@ class UserType extends AbstractType
         $resolver->setDefaults([
             'data_class' => User::class,
         ]);
+    }
+    
+    public function getRolesArray() : array
+    {
+        $choices = ["User" => UserType::ROLE_USER, 
+                    "Author" => UserType::ROLE_AUTHOR,
+                    "Administrator" => UserType::ROLE_ADMIN
+                ];
+        return $choices;
     }
 }

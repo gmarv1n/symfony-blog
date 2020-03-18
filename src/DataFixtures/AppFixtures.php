@@ -4,12 +4,21 @@ namespace App\DataFixtures;
 
 use App\Entity\BlogPost;
 use App\Entity\Comment;
+use App\Entity\User;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use DateTime;
 
 class AppFixtures extends Fixture
 {
+    private $passwordEncoder;
+
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $this->passwordEncoder = $passwordEncoder;
+    }
+
     public function load(ObjectManager $manager)
     {
         /**
@@ -18,6 +27,25 @@ class AppFixtures extends Fixture
 
         $date = new DateTime('2020-06-03');
 
+        // Putting some users 
+        // User 1
+        $user1 = new User();
+        $user1->setUserNickName("Gregory");
+        $user1->setRoles(["ROLE_ADMIN"]);
+        $user1->setEmail("admin@mail.com");
+        $user1->setPassword($this->passwordEncoder->encodePassword(
+            $user1,
+            '123654'
+        ));
+
+        // User 2
+        $user2 = new User();
+        $user2->setUserNickName("Vovochka");
+        $user2->setEmail("vovan@mail.com");
+        $user2->setPassword($this->passwordEncoder->encodePassword(
+            $user2,
+            '123654'
+        ));
 
         // Putting some random data for blog posts
         // Post 1
@@ -164,6 +192,9 @@ class AppFixtures extends Fixture
         $comment9->setComment('Hi everyone! Everybody knows that this code SUCKS!');
         $comment9->setIsApproved(true);
         $comment9->setDate($date);
+
+        $manager->persist($user1);
+        $manager->persist($user2);
 
         $manager->persist($blogPost1);
         $manager->persist($blogPost2);
