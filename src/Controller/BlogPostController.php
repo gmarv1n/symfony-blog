@@ -123,6 +123,7 @@ class BlogPostController extends AbstractController
         
         // Just some test code {
         $blogLikesCounter = $blogPost->getLikesCounter();
+        $countersIncrementator = new CountersIncrementator('BlogPost');
         $countersIncrementator->incrementCounter($blogPost, $blogLikesCounter);
 
         // } Just some test code 
