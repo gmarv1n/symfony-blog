@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\CountersIncrementator;
 use App\Entity\BlogPost;
 use App\Form\BlogPostType;
 use App\Repository\BlogPostRepository;
@@ -113,14 +114,20 @@ class BlogPostController extends AbstractController
     /**
      * @Route("/{id}/like", name="blog_post_like", methods={"GET"})
      */
-    public function like(BlogPost $blogPost): Response
+    public function like(BlogPost $blogPost, CountersIncrementator $countersIncrementator): Response
     {
         // This function call the like_the_post route in LikeConnection controller   
         
         // Getting a @string postSlug from blogPost obj
         $postSlug = $blogPost->getSlug();
+        
+        // Just some test code {
+        $blogLikesCounter = $blogPost->getLikesCounter();
+        $countersIncrementator->incrementCounter($blogPost, $blogLikesCounter);
 
-        $this->incrementLikeCounter($blogPost);
+        // } Just some test code 
+
+        //$this->incrementLikeCounter($blogPost);
         return $this->redirectToRoute('create_like', ['postSlug' => $postSlug]);
     }
 
