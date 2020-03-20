@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Service\CountersIncrementator;
+use App\Service\PostLikeCounterManager;
 use App\Entity\BlogPost;
 use App\Form\BlogPostType;
 use App\Repository\BlogPostRepository;
@@ -114,7 +114,7 @@ class BlogPostController extends AbstractController
     /**
      * @Route("/{id}/like", name="blog_post_like", methods={"GET"})
      */
-    public function like(BlogPost $blogPost, CountersIncrementator $countersIncrementator): Response
+    public function like(BlogPost $blogPost, PostLikeCounterManager $counterManager): Response
     {
         // This function call the like_the_post route in LikeConnection controller   
         
@@ -122,9 +122,10 @@ class BlogPostController extends AbstractController
         $postSlug = $blogPost->getSlug();
         
         // Just some test code {
+
         $blogLikesCounter = $blogPost->getLikesCounter();
-        $countersIncrementator = new CountersIncrementator('BlogPost');
-        $countersIncrementator->incrementCounter($blogPost, $blogLikesCounter);
+        
+        $counterManager->incrementLikeCounter($blogPost);
 
         // } Just some test code 
 

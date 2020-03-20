@@ -32,6 +32,22 @@ class BlogPostRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+     * Increments likes_counter field
+     */
+    public function incrementPostLikeCounterField($slug)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+            UPDATE blog_post
+            SET likes_counter = likes_counter + 1 
+            WHERE slug = :postSlug
+            ';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(['postSlug' => $slug]);
+    }
+
     // /**
     //  * @return BlogPost[] Returns an array of BlogPost objects
     //  */
