@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Service\PostLikeCounterManager;
+use App\Service\PostLiker;
 use App\Entity\BlogPost;
 use App\Form\BlogPostType;
 use App\Repository\BlogPostRepository;
@@ -114,41 +115,32 @@ class BlogPostController extends AbstractController
     /**
      * @Route("/{id}/like", name="blog_post_like", methods={"GET"})
      */
-    public function like(BlogPost $blogPost, PostLikeCounterManager $counterManager): Response
+    public function like(BlogPost $blogPost): Response
     {
         // This function call the like_the_post route in LikeConnection controller   
         
         // Getting a @string postSlug from blogPost obj
         $postSlug = $blogPost->getSlug();
         
-        // Just some test code {
-
-        $blogLikesCounter = $blogPost->getLikesCounter();
-        
-        $counterManager->incrementLikeCounter($blogPost);
-
-        // } Just some test code 
-
-        //$this->incrementLikeCounter($blogPost);
         return $this->redirectToRoute('create_like', ['postSlug' => $postSlug]);
     }
 
-    /**
-     * This function increments like counter field
+    /** REFACTORED
+     *  This function increments like counter field 
      */
 
-    public function incrementLikeCounter(BlogPost $blogPost) : void
-    {
-        $postLikesCounter = $blogPost->getLikesCounter();
-        $postLikesCounter++;
-        $blogPost->setLikesCounter($postLikesCounter);
+    // public function incrementLikeCounter(BlogPost $blogPost) : void
+    // {
+    //     $postLikesCounter = $blogPost->getLikesCounter();
+    //     $postLikesCounter++;
+    //     $blogPost->setLikesCounter($postLikesCounter);
 
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($blogPost);
-        $entityManager->flush();
-    }
+    //     $entityManager = $this->getDoctrine()->getManager();
+    //     $entityManager->persist($blogPost);
+    //     $entityManager->flush();
+    // }
 
-    /**
+    /** 
      * @Route("/{id}/unlike", name="blog_post_unlike", methods={"GET"})
      */
     public function unlike(BlogPost $blogPost): Response
@@ -158,24 +150,23 @@ class BlogPostController extends AbstractController
         // Getting a @string postSlug from blogPost obj
         $postSlug = $blogPost->getSlug();
 
-        $this->decrementLikeCounter($blogPost);
         return $this->redirectToRoute('delete_like', ['postSlug' => $postSlug]);
     }
 
-    /**
+    /** REFACTORED
      * This function decrements like counter field
      */
 
-    public function decrementLikeCounter(BlogPost $blogPost) : void
-    {
-        $postLikesCounter = $blogPost->getLikesCounter();
-        $postLikesCounter--;
-        $blogPost->setLikesCounter($postLikesCounter);
+    // public function decrementLikeCounter(BlogPost $blogPost) : void
+    // {
+    //     $postLikesCounter = $blogPost->getLikesCounter();
+    //     $postLikesCounter--;
+    //     $blogPost->setLikesCounter($postLikesCounter);
 
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($blogPost);
-        $entityManager->flush();
-    }  
+    //     $entityManager = $this->getDoctrine()->getManager();
+    //     $entityManager->persist($blogPost);
+    //     $entityManager->flush();
+    // }  
 
     /**
      * Check is post already liked by logged user

@@ -56,16 +56,29 @@ class LikeConnectionRepository extends ServiceEntityRepository
           
       }
 
-    public function writeLikeConnection(string $slug)
+    public function writeLikeConnection(string $userName, string $postSlug) :Void
     {
         $dbConnection = $this->getEntityManager()->getConnection();
 
         $sqlRequest = '
-            INSERT INTO blog_post (user_name, post_slug)
+            INSERT INTO like_connection (user_name, post_slug)
             VALUES (:userName, :postSlug)
             ';
         $request = $dbConnection->prepare($sqlRequest);
-        $request->execute(['postSlug' => $slug]);
+        $request->execute(['userName' => $userName, 'postSlug' => $postSlug]);
+    }
+
+    public function removeLikeConnection(string $userName, string $postSlug) :Void
+    {
+        $dbConnection = $this->getEntityManager()->getConnection();
+
+        $sqlRequest = '
+            DELETE FROM like_connection
+            WHERE user_name = :userName 
+            AND post_slug = :postSlug
+            ';
+        $request = $dbConnection->prepare($sqlRequest);
+        $request->execute(['userName' => $userName, 'postSlug' => $postSlug]);
     }
     
 
