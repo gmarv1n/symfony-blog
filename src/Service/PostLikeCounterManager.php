@@ -13,10 +13,17 @@ class PostLikeCounterManager
         $this->repository = $entityManager->getRepository(BlogPost::class);
     }
 
-    public function incrementLikeCounter($post) : Void
+    public function incrementLikeCounter(string $post) : Void
     {
         $postSlug = $post->getSlug();
         
         $this->repository->incrementPostLikeCounterField($postSlug);
+    }
+
+    public function decrementLikeCounter(string $post) : Void
+    {
+        $postSlug = $post->getSlug();
+        
+        $this->repository->decrementPostLikeCounterField($postSlug);
     }
 }

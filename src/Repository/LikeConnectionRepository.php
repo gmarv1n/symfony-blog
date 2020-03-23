@@ -55,6 +55,18 @@ class LikeConnectionRepository extends ServiceEntityRepository
         }
           
       }
+
+    public function writeLikeConnection(string $slug)
+    {
+        $dbConnection = $this->getEntityManager()->getConnection();
+
+        $sqlRequest = '
+            INSERT INTO blog_post (user_name, post_slug)
+            VALUES (:userName, :postSlug)
+            ';
+        $request = $dbConnection->prepare($sqlRequest);
+        $request->execute(['postSlug' => $slug]);
+    }
     
 
     // /**
