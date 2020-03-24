@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\LikeServices;
 use App\Entity\BlogPost;
 use Doctrine\ORM\EntityManagerInterface;
 

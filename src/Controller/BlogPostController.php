@@ -2,18 +2,14 @@
 
 namespace App\Controller;
 
-use App\Service\PostLikeCounterManager;
-use App\Service\PostLiker;
 use App\Entity\BlogPost;
 use App\Form\BlogPostType;
 use App\Repository\BlogPostRepository;
-use App\Entity\LikeConnection;
-use App\Repository\CommentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Controller\LikeConnectionController;
+use App\Service\LikeServices\LikeUrlGenerator;
 
 /**
  * @Route("/blog")
@@ -56,25 +52,16 @@ class BlogPostController extends AbstractController
     /**
      * @Route("/{id}", name="blog_post_show", methods={"GET"})
      */
-    public function show(BlogPost $blogPost): Response
+    public function show(BlogPost $blogPost, LikeUrlGenerator $likeUrlGenerator): Response
     {
-        // Generate url for LikeConnection 
+        $userName = $this->getUser()->getUserName();
+        $postSlug = $blogPost->getSlug();
         $blogPostId = $blogPost->getId();
-        $likeUrl = null;
-        $likeUrlText = null;
 
-        $isAlreadyLiked = $this->checkTheLikeExistence($blogPost);
-
-        if ( $isAlreadyLiked ) {
-            $likeUrlText = "Unlike!";
-            $likeUrl = $this->generateUrl('blog_post_unlike', ['id' => $blogPostId]);
-        } if ( !$isAlreadyLiked ) {
-            $likeUrlText = "Like!";
-            $likeUrl = $this->generateUrl('blog_post_like', ['id' => $blogPostId]);
-        }
+        $likeUrl = $likeUrlGenerator->generateLikeUrl($postSlug, $userName, $blogPostId);
 
         return $this->render('blog_post/show.html.twig', [
-            'blog_post' => $blogPost, 'like_post_url' => $likeUrl, 'likeUrlText' => $likeUrlText
+            'blog_post' => $blogPost, 'like_post_url' => $likeUrl['url'], 'likeUrlText' => $likeUrl['urlText']
         ]);
     }
 
@@ -125,6 +112,16 @@ class BlogPostController extends AbstractController
         return $this->redirectToRoute('create_like', ['postSlug' => $postSlug]);
     }
 
+    public function unlike(BlogPost $blogPost): Response
+    {
+        // This function call the delete_like route in LikeConnection controller   
+        
+        // Getting a @string postSlug from blogPost obj
+        $postSlug = $blogPost->getSlug();
+
+        return $this->redirectToRoute('delete_like', ['postSlug' => $postSlug]);
+    }
+
     /** REFACTORED
      *  This function increments like counter field 
      */
@@ -143,16 +140,6 @@ class BlogPostController extends AbstractController
     /** 
      * @Route("/{id}/unlike", name="blog_post_unlike", methods={"GET"})
      */
-    public function unlike(BlogPost $blogPost): Response
-    {
-        // This function call the delete_like route in LikeConnection controller   
-        
-        // Getting a @string postSlug from blogPost obj
-        $postSlug = $blogPost->getSlug();
-
-        return $this->redirectToRoute('delete_like', ['postSlug' => $postSlug]);
-    }
-
     /** REFACTORED
      * This function decrements like counter field
      */
@@ -168,23 +155,23 @@ class BlogPostController extends AbstractController
     //     $entityManager->flush();
     // }  
 
-    /**
+    /** REFACTORED
      * Check is post already liked by logged user
      */
 
-    public function checkTheLikeExistence(BlogPost $blogPost) : Bool
-    {
-        $userName = $this->getUser()
-                         ->getUserName();
-        $postSlug = $blogPost->getSlug();
+    // public function checkTheLikeExistence(BlogPost $blogPost) : Bool
+    // {
+    //     $userName = $this->getUser()
+    //                      ->getUserName();
+    //     $postSlug = $blogPost->getSlug();
 
-        $isAlreadyLiked = $this->getDoctrine()
-                               ->getRepository(LikeConnection::class)
-                               ->isLikeConnectionExtists($postSlug, $userName);
-        if ($isAlreadyLiked) {
-            return true;
-        } else if ( !$isAlreadyLiked ) {
-            return false;
-        }
-    } 
+    //     $isAlreadyLiked = $this->getDoctrine()
+    //                            ->getRepository(LikeConnection::class)
+    //                            ->isLikeConnectionExtists($postSlug, $userName);
+    //     if ($isAlreadyLiked) {
+    //         return true;
+    //     } else if ( !$isAlreadyLiked ) {
+    //         return false;
+    //     }
+    // } 
 }

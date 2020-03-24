@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Service;
-use App\Entity\BlogPost;
+namespace App\Service\LikeServices;
 use App\Entity\LikeConnection;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -14,17 +13,18 @@ class PostLiker
         $this->repository = $entityManager->getRepository(LikeConnection::class);
     }
 
-    public function createPostLike(string $userName, string $postSlug) {
-
+    public function createPostLike(string $userName, string $postSlug) : Void
+    {
         $this->repository->writeLikeConnection($userName, $postSlug);
- 
     }
 
-    public function removePostLike(string $userName, string $postSlug) {
+    public function removePostLike(string $userName, string $postSlug) : Void
+    {
         $this->repository->removeLikeConnection($userName, $postSlug);
     }
 
-    public function checkIsLiked() {
-        
+    public function isLiked(string $userName, string $postSlug) : Bool
+    {
+        return $this->repository->isLikeConnectionExtists($userName, $postSlug);;
     }
 }

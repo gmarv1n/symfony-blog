@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\BlogPost;
-use App\Service\PostLiker;
-use App\Service\PostLikeCounterManager;
+use App\Service\LikeServices\PostLiker;
+use App\Service\LikeServices\PostLikeCounterManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\LikeConnection;
 use App\Repository\BlogPostRepository;
