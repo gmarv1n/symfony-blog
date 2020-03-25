@@ -112,6 +112,9 @@ class BlogPostController extends AbstractController
         return $this->redirectToRoute('create_like', ['postSlug' => $postSlug]);
     }
 
+    /** 
+     * @Route("/{id}/unlike", name="blog_post_unlike", methods={"GET"})
+     */
     public function unlike(BlogPost $blogPost): Response
     {
         // This function call the delete_like route in LikeConnection controller   
@@ -137,9 +140,7 @@ class BlogPostController extends AbstractController
     //     $entityManager->flush();
     // }
 
-    /** 
-     * @Route("/{id}/unlike", name="blog_post_unlike", methods={"GET"})
-     */
+    
     /** REFACTORED
      * This function decrements like counter field
      */

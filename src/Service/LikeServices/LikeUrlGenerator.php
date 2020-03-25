@@ -16,7 +16,7 @@ class LikeUrlGenerator
         $this->postLiker = $postLiker;
     }
 
-    public function generateLikeUrl(string $postSlug, string $userName, int $blogPostId) : Array
+    public function generateLikeUrl(string $postSlug, string $userName, string $blogPostId) : Array
     {
         $urlArray = [];
         $isAlreadyLiked = $this->postLiker->isLiked($userName, $postSlug);
