@@ -13,12 +13,12 @@ class PostLiker
         $this->repository = $entityManager->getRepository(LikeConnection::class);
     }
 
-    public function createPostLike(string $userName, string $postSlug) : Void
+    public function like(string $userName, string $postSlug) : Void
     {
         $this->repository->writeLikeConnection($userName, $postSlug);
     }
 
-    public function removePostLike(string $userName, string $postSlug) : Void
+    public function unlike(string $userName, string $postSlug) : Void
     {
         $this->repository->removeLikeConnection($userName, $postSlug);
     }

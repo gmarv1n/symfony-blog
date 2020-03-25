@@ -2,14 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\BlogPost;
+
 use App\Service\LikeServices\PostLiker;
 use App\Service\LikeServices\PostLikeCounterManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Service\PostServices\PostFinder;
-use App\Entity\LikeConnection;
-use App\Repository\BlogPostRepository;
-use Doctrine\ORM\Mapping\PostLoad;
 use Symfony\Component\Routing\Annotation\Route;
 
 class LikeConnectionController extends AbstractController
@@ -26,14 +23,10 @@ class LikeConnectionController extends AbstractController
         //in user and make a note in LikeConnections db with user.name and post.slug
         $userName = $this->getUser()->getUserName();
 
-        $postLiker->createPostLike($postSlug, $userName);
+        $postLiker->like($postSlug, $userName);
         $counterManager->incrementLikeCounter($postSlug);
 
         $likedPostId = $finder->getIdBySlug($postSlug);
-        // $likedPostId = $this->getDoctrine()
-        //                            ->getRepository(BlogPost::class)
-        //                            ->findByPostSlugField($postSlug)
-        //                            ->getId();
         
         return $this->redirectToRoute('blog_post_show', ['id' => $likedPostId]);
         
@@ -51,15 +44,10 @@ class LikeConnectionController extends AbstractController
         //in user and remove a note from LikeConnections db where user.name and post.slug
         $userName = $this->getUser()->getUserName();
 
-        $postLiker->removePostLike($postSlug, $userName);
+        $postLiker->unlike($postSlug, $userName);
         $counterManager->decrementLikeCounter($postSlug);
 
         $unLikedPostId = $finder->getIdBySlug($postSlug);
-
-        // $unLikedPostId = $this->getDoctrine()
-        //                        ->getRepository(BlogPost::class)
-        //                        ->findByPostSlugField($postSlug)
-        //                        ->getId();
 
         return $this->redirectToRoute('blog_post_show', ['id' => $unLikedPostId]);
         
