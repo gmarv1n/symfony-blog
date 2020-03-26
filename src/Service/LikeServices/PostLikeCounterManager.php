@@ -5,7 +5,10 @@ use App\Entity\BlogPost;
 use Doctrine\ORM\EntityManagerInterface;
 
 class PostLikeCounterManager
-{
+{   
+    /**
+     * @var BlogPostRepository
+     */
     private $repository = null;
 
     public function __construct(EntityManagerInterface $entityManager)

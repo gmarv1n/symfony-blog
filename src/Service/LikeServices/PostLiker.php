@@ -6,8 +6,12 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class PostLiker
 {
+    /**
+     * @var BlopGostRepository
+     */
     private $repository = null;
 
+    
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->repository = $entityManager->getRepository(LikeConnection::class);

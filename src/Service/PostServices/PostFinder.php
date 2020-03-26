@@ -6,6 +6,9 @@ use App\Entity\BlogPost;
 
 class PostFinder
 {
+    /**
+     * @var BlogPostRepository
+     */
     private $repository = null;
 
     public function __construct(EntityManagerInterface $entityManager)
