@@ -54,14 +54,16 @@ class BlogPostController extends AbstractController
      */
     public function show(BlogPost $blogPost, LikeUrlGenerator $likeUrlGenerator): Response
     {
-        $userName = $this->getUser()->getUserName();
+        //$userName = $this->getUser()->getUserName();
         $postSlug = $blogPost->getSlug();
         $blogPostId = $blogPost->getId();
 
-        $likeUrl = $likeUrlGenerator->generateLikeUrl($postSlug, $userName, $blogPostId);
+        $likeUrl = $likeUrlGenerator->generateLikeUrl($postSlug, $blogPostId);
 
         return $this->render('blog_post/show.html.twig', [
-            'blog_post' => $blogPost, 'like_post_url' => $likeUrl['url'], 'likeUrlText' => $likeUrl['urlText']
+            'blog_post'     => $blogPost, 
+            'like_post_url' => $likeUrl['url'], 
+            'likeUrlText'   => $likeUrl['urlText']
         ]);
     }
 

@@ -33,15 +33,15 @@ class BlogPostRepository extends ServiceEntityRepository
     }
 
     /**
-     * Increments likes_counter field
+     * Increments likes_count field
      */
-    public function incrementPostLikeCounterField(string $slug)
+    public function incrementPostLikeCountField(string $slug)
     {
         $conn = $this->getEntityManager()->getConnection();
 
         $sql = '
             UPDATE blog_post
-            SET likes_counter = likes_counter + 1 
+            SET likes_count = likes_count + 1 
             WHERE slug = :postSlug
             ';
         $stmt = $conn->prepare($sql);
@@ -49,15 +49,15 @@ class BlogPostRepository extends ServiceEntityRepository
     }
 
     /**
-     * Decrements likes_counter field
+     * Decrements likes_count field
      */
-    public function decrementPostLikeCounterField(string $slug)
+    public function decrementPostLikeCountField(string $slug)
     {
         $conn = $this->getEntityManager()->getConnection();
 
         $sql = '
             UPDATE blog_post
-            SET likes_counter = likes_counter - 1 
+            SET likes_count = likes_count - 1 
             WHERE slug = :postSlug
             ';
         $stmt = $conn->prepare($sql);

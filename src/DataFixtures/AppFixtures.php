@@ -57,7 +57,7 @@ class AppFixtures extends Fixture
         $blogPost1->setCategory('blogpost');
         $blogPost1->setTags('tags, for, testing');
         $blogPost1->setAuthorName('test@test.com');
-        $blogPost1->setLikesCounter(0);
+        $blogPost1->setLikesCount(0);
         $blogPost1->setCommentsCount(0);
         $blogPost1->setDate($date);
 
@@ -71,7 +71,7 @@ class AppFixtures extends Fixture
         $blogPost2->setCategory('article');
         $blogPost2->setTags('tags, for, testing');
         $blogPost2->setAuthorName('test@test.com');
-        $blogPost2->setLikesCounter(0);
+        $blogPost2->setLikesCount(0);
         $blogPost2->setCommentsCount(0);
         $blogPost2->setDate($date);
 
@@ -85,7 +85,7 @@ class AppFixtures extends Fixture
         $blogPost3->setCategory('thoughts');
         $blogPost3->setTags('tags, for, testing');
         $blogPost3->setAuthorName('test@test.com');
-        $blogPost3->setLikesCounter(0);
+        $blogPost3->setLikesCount(0);
         $blogPost3->setCommentsCount(0);
         $blogPost3->setDate($date);
 
@@ -99,7 +99,7 @@ class AppFixtures extends Fixture
         $blogPost4->setCategory('living');
         $blogPost4->setTags('tags, for, testing');
         $blogPost4->setAuthorName('test@test.com');
-        $blogPost4->setLikesCounter(0);
+        $blogPost4->setLikesCount(0);
         $blogPost4->setCommentsCount(0);
         $blogPost4->setDate($date);
 
@@ -113,7 +113,7 @@ class AppFixtures extends Fixture
         $blogPost5->setCategory('coding');
         $blogPost5->setTags('tags, for, testing');
         $blogPost5->setAuthorName('test@test.com');
-        $blogPost5->setLikesCounter(0);
+        $blogPost5->setLikesCount(0);
         $blogPost5->setCommentsCount(0);
         $blogPost5->setDate($date);
 

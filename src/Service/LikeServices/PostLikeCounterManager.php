@@ -19,11 +19,11 @@ class PostLikeCounterManager
     public function incrementLikeCounter(string $postSlug) : Void
     {
         
-        $this->repository->incrementPostLikeCounterField($postSlug);
+        $this->repository->incrementPostLikeCountField($postSlug);
     }
 
     public function decrementLikeCounter(string $postSlug) : Void
     {        
-        $this->repository->decrementPostLikeCounterField($postSlug);
+        $this->repository->decrementPostLikeCountField($postSlug);
     }
 }

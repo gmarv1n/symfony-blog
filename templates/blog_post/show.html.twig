@@ -3,6 +3,16 @@
 {% block title %}BlogPost{% endblock %}
 
 {% block body %}
+
+    <style>
+        .unlike-link-unactive {
+            color: grey;
+        }
+        .unlike-link-unactive:hover {
+            color: lightgrey;
+        }
+    </style>
+
     <h1>BlogPost</h1>
 
     <table class="table">
@@ -49,7 +59,7 @@
             </tr>
             <tr>
                 <th>Likes_counter</th>
-                <td>{{ blog_post.likesCounter }}</td>
+                <td>{{ blog_post.likesCount }}</td>
             </tr>
             <tr>
                 <th>Comments_count</th>
@@ -62,7 +72,11 @@
 
     <a href="{{ path('blog_post_edit', {'id': blog_post.id}) }}">edit</a>
     <br><br>
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
     <a href="{{ like_post_url }}"><strong>{{ likeUrlText }}</strong></a>
+    {% else %}
+    <span class="unlike-link-unactive" title="Only registered users can like a post"><strong>Like</strong></span>
+    {% endif %}
     <br><br>
     {{ include('blog_post/_delete_form.html.twig') }}
 

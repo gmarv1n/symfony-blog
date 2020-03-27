@@ -18,7 +18,7 @@
                 <th>Tags</th>
                 <th>Date</th>
                 <th>Author_name</th>
-                <th>Likes_counter</th>
+                <th>Likes_count</th>
                 <th>Comments_count</th>
                 <th>actions</th>
             </tr>
@@ -36,7 +36,7 @@
                 <td>{{ blog_post.tags }}</td>
                 <td>{{ blog_post.date ? blog_post.date|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ blog_post.authorName }}</td>
-                <td>{{ blog_post.likesCounter }}</td>
+                <td>{{ blog_post.likesCount }}</td>
                 <td>{{ blog_post.commentsCount }}</td>
                 <td>
                     <a href="{{ path('blog_post_show', {'id': blog_post.id}) }}">show</a>

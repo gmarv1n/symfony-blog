@@ -64,7 +64,7 @@ class BlogPost
     /**
      * @ORM\Column(type="integer")
      */
-    private $likes_counter;
+    private $likes_count;
 
     /**
      * @ORM\Column(type="integer")
@@ -184,14 +184,14 @@ class BlogPost
         return $this;
     }
 
-    public function getLikesCounter(): ?int
+    public function getLikesCount(): ?int
     {
-        return $this->likes_counter;
+        return $this->likes_count;
     }
 
-    public function setLikesCounter(int $likes_counter): self
+    public function setLikesCount(int $likes_count): self
     {
-        $this->likes_counter = $likes_counter;
+        $this->likes_count = $likes_count;
 
         return $this;
     }
