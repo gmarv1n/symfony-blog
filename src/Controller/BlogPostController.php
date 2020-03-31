@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\LikeServices\LikeUrlGenerator;
+use App\Service\PostServices\AuthorshipChecker;
 
 /**
  * @Route("/blog")
@@ -52,18 +53,26 @@ class BlogPostController extends AbstractController
     /**
      * @Route("/{id}", name="blog_post_show", methods={"GET"})
      */
-    public function show(BlogPost $blogPost, LikeUrlGenerator $likeUrlGenerator): Response
+    public function show(BlogPost $blogPost, LikeUrlGenerator $likeUrlGenerator, AuthorshipChecker $authorshipChecker): Response
     {
-        //$userName = $this->getUser()->getUserName();
+        
         $postSlug = $blogPost->getSlug();
         $blogPostId = $blogPost->getId();
 
         $likeUrl = $likeUrlGenerator->generateLikeUrl($postSlug, $blogPostId);
 
+        // $isAuthor variable recieve re result of AuthorShipChecker's method isAuthor() and
+        // send it to a view as 'isAuthor' wich is uses in logic inside of view to show or not
+        // to show the delete button and edit button, so just the author of post (and admin) 
+        // can delete the post
+
+        $isAuthor = $authorshipChecker->isAuthor($blogPost);
+
         return $this->render('blog_post/show.html.twig', [
             'blog_post'     => $blogPost, 
             'like_post_url' => $likeUrl['url'], 
-            'likeUrlText'   => $likeUrl['urlText']
+            'likeUrlText'   => $likeUrl['urlText'],
+            'isAuthor'      => $isAuthor
         ]);
     }
 

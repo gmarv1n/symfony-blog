@@ -29,7 +29,7 @@ class LikeConnectionController extends AbstractController
      * This function resieves $request object and get 'postSlug' property from
      * POST. By using PostLiker, PostCounterManager and PostFinder services, 
      * function initialize $postSlug variable from POST, then get the logged in 
-     * @userName, create likeConnection with PostLiker, increments the likes_count
+     * $userName, create likeConnection with PostLiker, increments the likes_count
      * field with PostLikeCounterManager, get the likedPostId with PostFinder and return 
      * RedicretResponse wich redirect back to the post.
      * 
@@ -62,13 +62,13 @@ class LikeConnectionController extends AbstractController
 
     /**
      * @Route("/delete-like", name="delete_like")
-     * 
+     *
      * unLikeThePost
      * 
      * This function resieves $request object and get 'postSlug' property from
      * POST. By using PostLiker, PostCounterManager and PostFinder services, 
      * function initialize $postSlug variable from POST, then get the logged in 
-     * @userName, remove likeConnection with PostLiker, deccrements the likes_count
+     * $userName, remove likeConnection with PostLiker, deccrements the likes_count
      * field with PostLikeCounterManager, get the likedPostId with PostFinder and return 
      * RedicretResponse wich redirect back to the post.
      * 
