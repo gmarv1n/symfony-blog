@@ -1,17 +1,40 @@
 <?php
+/**
+ * LikeUrlGenerator Service
+ * 
+ * This class generates 'like url' in BlogPostController depending on user authorization
+ * and like existense in likeconnection table. If user is authorized - like button become 
+ * available and if user already liked the post, url switch to unlike.
+ * 
+ * @author Gregory Yatsukhno <gyatsukhno@gmail.com>
+ * @version 1.0
+ */
 
 namespace App\Service\LikeServices;
+
 use App\Service\LikeServices\PostLiker;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Security;
-
 class LikeUrlGenerator
-
 {
+    /**
+     * @var UrlGeneratorInterface - dependency for generating url
+     */
     private $router;
+
+    /**
+     * @var PostLiker - dependency for checking like connection existence
+     */
     private $postLiker;
+
+    /**
+     * @var Security  - dependency for getting a user
+     */
     private $security;
 
+    /**
+     * Constructor for initializing private variables.
+     */
     public function __construct(UrlGeneratorInterface $router, PostLiker $postLiker, Security $security)
     {
         $this->router = $router;
@@ -19,6 +42,21 @@ class LikeUrlGenerator
         $this->security = $security;
     }
 
+    /**
+     * generateLikeUrl
+     * 
+     * This function return array with url and text for url. Function recieve post_slug 
+     * and id of blogpost, check if user not null, then check if like_connection with this user
+     * and post_slug exist and push 'urlText' and 'url' to an array and returns it.
+     * If user don't logged in, in returns url dummy, wich not go to the 'show' template cause of
+     * template logic. Function uses constructed $router to generat() method, @postLiker to check
+     * the like existence with method isLike() and $security to get (or not) user.
+     * 
+     * @param string @postSlug post_slug field
+     * @param string @blogPostId id of blog post for url generator
+     * 
+     * @return array @urlArray['urlText' => 'Like/Unlike', 'url' => '/blog/id/like(unlike)']
+     */
     public function generateLikeUrl(string $postSlug, string $blogPostId) : Array
     {
         $userName = null;
