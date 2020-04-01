@@ -7,12 +7,16 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Security\Core\Security;
 use DateTime;
 
 class BlogPostType extends AbstractType
 {
+    /**
+     * @var User
+     */
     private $security;
 
     public function __construct(Security $security)
@@ -36,11 +40,11 @@ class BlogPostType extends AbstractType
             ->add('date', DateTimeType::class, [
                 'data' => $todayDate,
             ])
-            ->add('author_name', HiddenType::class, [ /// MAKE IT NON-HIDDEN
+            ->add('author_name', HiddenType::class, [
                 'data' => $authorName,
             ])
-            ->add('likes_count')
-            ->add('comments_count')
+            ->add('likes_count', HiddenType::class)
+            ->add('comments_count', HiddenType::class)
         ;
     }
 
