@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\LikeServices\LikeUrlGenerator;
 use App\Service\PostServices\AuthorshipChecker;
+use App\Service\LikeServices\BlogPostLiker;
 
 /**
  * @Route("/blog")
@@ -113,27 +114,27 @@ class BlogPostController extends AbstractController
     /**
      * @Route("/{id}/like", name="blog_post_like", methods={"GET"})
      */
-    public function like(BlogPost $blogPost): Response
-    {
-        // This function call the like_the_post route in LikeConnection controller   
-        
-        // Getting a @string postSlug from blogPost obj
+    public function like(BlogPost $blogPost, BlogPostLiker $liker): Response
+    {   
         $postSlug = $blogPost->getSlug();
+        $liker->like($postSlug);
+
+        $blogPostId = $blogPost->getId();
         
-        return $this->redirectToRoute('create_like', ['postSlug' => $postSlug]);
+        return $this->redirectToRoute('blog_post_show', ['id' => $blogPostId]);
     }
 
     /** 
      * @Route("/{id}/unlike", name="blog_post_unlike", methods={"GET"})
      */
-    public function unlike(BlogPost $blogPost): Response
+    public function unlike(BlogPost $blogPost, BlogPostLiker $liker): Response
     {
-        // This function call the delete_like route in LikeConnection controller   
-        
-        // Getting a @string postSlug from blogPost obj
         $postSlug = $blogPost->getSlug();
+        $liker->unlike($postSlug);
 
-        return $this->redirectToRoute('delete_like', ['postSlug' => $postSlug]);
+        $blogPostId = $blogPost->getId();
+        
+        return $this->redirectToRoute('blog_post_show', ['id' => $blogPostId]);
     }
 
 }

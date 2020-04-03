@@ -39,7 +39,7 @@ class LikeConnectionRepository extends ServiceEntityRepository
       * @return true if like connection with argument fields extists
       */
     
-      public function isLikeConnectionExtists($postSlug, $userName) : Bool
+      public function isLikeConnectionExtists($userName, $postSlug) : Bool
       {
         $likeConnection = $this->createQueryBuilder('l')
                                ->andWhere('l.post_slug = :postSlug')

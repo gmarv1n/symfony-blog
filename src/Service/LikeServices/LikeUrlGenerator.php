@@ -12,7 +12,7 @@
 
 namespace App\Service\LikeServices;
 
-use App\Service\LikeServices\PostLiker;
+use App\Service\LikeServices\BlogPostLiker;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Security;
 class LikeUrlGenerator
@@ -23,9 +23,9 @@ class LikeUrlGenerator
     private $router;
 
     /**
-     * @var PostLiker - dependency for checking like connection existence
+     * @var BlogPostLiker - dependency for checking like connection existence
      */
-    private $postLiker;
+    private $blogPostLiker;
 
     /**
      * @var Security  - dependency for getting a user
@@ -35,10 +35,10 @@ class LikeUrlGenerator
     /**
      * Constructor for initializing private variables.
      */
-    public function __construct(UrlGeneratorInterface $router, PostLiker $postLiker, Security $security)
+    public function __construct(UrlGeneratorInterface $router, BlogPostLiker $blogPostLiker, Security $security)
     {
         $this->router = $router;
-        $this->postLiker = $postLiker;
+        $this->blogPostLiker = $blogPostLiker;
         $this->security = $security;
     }
 
@@ -59,12 +59,11 @@ class LikeUrlGenerator
      */
     public function generateLikeUrl(string $postSlug, string $blogPostId) : Array
     {
-        $userName = null;
         $urlArray = [];
         if ( $this->security->getUser() ) {
             $userName =$this->security->getUser()->getUserName();
             
-            $isAlreadyLiked = $this->postLiker->isLiked($userName, $postSlug);
+            $isAlreadyLiked = $this->blogPostLiker->isLiked($postSlug);
 
             if ( $isAlreadyLiked ) {
                 $urlArray['urlText'] = "Unlike!";
