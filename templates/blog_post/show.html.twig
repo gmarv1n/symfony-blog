@@ -24,6 +24,7 @@
             <tr>
                 <th>Image_name</th>
                 <td>{{ blog_post.imageName }}</td>
+                <td><img src="{{ vich_uploader_asset(blog_post, "imageFile") }}" alt="{{ blog_post.title }}" /></td>
             </tr>
             <tr>
                 <th>Content</th>

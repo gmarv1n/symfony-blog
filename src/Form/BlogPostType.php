@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Security\Core\Security;
 use DateTime;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class BlogPostType extends AbstractType
 {
@@ -33,6 +34,15 @@ class BlogPostType extends AbstractType
             ->add('title')
             ->add('slug')
             ->add('image_name')
+            ->add('imageFile', VichImageType::class, [
+                'required' => false,
+                'allow_delete' => true,
+                'download_label' => 'download_file',
+                'download_uri' => true,
+                'image_uri' => true,
+                //'imagine_pattern' => '...',
+                'asset_helper' => true,
+            ])
             ->add('short_content')
             ->add('content')
             ->add('category')
