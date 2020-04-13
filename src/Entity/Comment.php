@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
@@ -11,8 +12,7 @@ class Comment
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
     private $id;
 
@@ -41,7 +41,13 @@ class Comment
      */
     private $date;
 
-    public function getId(): ?int
+    public function __construct()
+    {   
+        $uuid = Uuid::uuid4();
+        $this->id = $uuid->toString();
+    }
+
+    public function getId(): ?String
     {
         return $this->id;
     }

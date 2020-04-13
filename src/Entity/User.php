@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -14,8 +15,7 @@ class User implements UserInterface
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
     private $id;
 
@@ -40,7 +40,13 @@ class User implements UserInterface
      */
     private $password;
 
-    public function getId(): ?int
+    public function __construct()
+    {   
+        $uuid = Uuid::uuid4();
+        $this->id = $uuid->toString();
+    }
+
+    public function getId(): ?String
     {
         return $this->id;
     }

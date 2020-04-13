@@ -53,8 +53,8 @@ class BlogPostType extends AbstractType
             ->add('author_name', HiddenType::class, [
                 'data' => $authorName,
             ])
-            ->add('likes_count', HiddenType::class)
-            ->add('comments_count', HiddenType::class)
+            ->add('likes_count') //, HiddenType::class
+            ->add('comments_count') //, HiddenType::class
         ;
     }
 

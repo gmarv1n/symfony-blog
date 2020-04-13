@@ -39,8 +39,8 @@
                 <td>{{ blog_post.likesCount }}</td>
                 <td>{{ blog_post.commentsCount }}</td>
                 <td>
-                    <a href="{{ path('blog_post_show', {'id': blog_post.id}) }}">show</a>
-                    <a href="{{ path('blog_post_edit', {'id': blog_post.id}) }}">edit</a>
+                    <a href="{{ path('blog_post_show', {'slug': blog_post.slug}) }}">show</a>
+                    <a href="{{ path('blog_post_edit', {'slug': blog_post.slug}) }}">edit</a>
                 </td>
             </tr>
         {% else %}

@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\BlogPostRepository")
@@ -14,8 +15,7 @@ class BlogPost
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
     private $id;
 
@@ -34,7 +34,7 @@ class BlogPost
     private $title;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true, nullable=false)
      */
     private $slug;
 
@@ -90,10 +90,18 @@ class BlogPost
      */
     private $comments_count;
 
-    public function getId(): ?int
+    
+    public function __construct()
+    {   
+        $uuid = Uuid::uuid4();
+        $this->id = $uuid->toString();
+    }
+
+    public function getId(): String
     {
         return $this->id;
     }
+
 
     public function getTitle(): ?string
     {

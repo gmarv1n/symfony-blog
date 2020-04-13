@@ -52,7 +52,7 @@ class BlogPostController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="blog_post_show", methods={"GET"})
+     * @Route("/{slug}", name="blog_post_show", methods={"GET"})
      */
     public function show(BlogPost $blogPost, LikeUrlGenerator $likeUrlGenerator, AuthorshipChecker $authorshipChecker): Response
     {
@@ -78,7 +78,7 @@ class BlogPostController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="blog_post_edit", methods={"GET","POST"})
+     * @Route("/{slug}/edit", name="blog_post_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, BlogPost $blogPost): Response
     {
@@ -98,7 +98,7 @@ class BlogPostController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="blog_post_delete", methods={"DELETE"})
+     * @Route("/{slug}", name="blog_post_delete", methods={"DELETE"})
      */
     public function delete(Request $request, BlogPost $blogPost): Response
     {
@@ -112,7 +112,7 @@ class BlogPostController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/like", name="blog_post_like", methods={"GET"})
+     * @Route("/{slug}/like", name="blog_post_like", methods={"GET"})
      */
     public function like(BlogPost $blogPost, BlogPostLiker $liker): Response
     {   
@@ -125,7 +125,7 @@ class BlogPostController extends AbstractController
     }
 
     /** 
-     * @Route("/{id}/unlike", name="blog_post_unlike", methods={"GET"})
+     * @Route("/{slug}/unlike", name="blog_post_unlike", methods={"GET"})
      */
     public function unlike(BlogPost $blogPost, BlogPostLiker $liker): Response
     {
