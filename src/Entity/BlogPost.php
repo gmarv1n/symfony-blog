@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Ramsey\Uuid\Uuid;
 
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\BlogPostRepository")
  * @Vich\Uploadable

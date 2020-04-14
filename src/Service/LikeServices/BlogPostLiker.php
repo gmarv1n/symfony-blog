@@ -19,7 +19,7 @@ use App\Service\LikeServices\PostLikeCounterManager;
 class BlogPostLiker
 {
     /**
-     * @var LikeConnectionRepository - dependency for using LikeConnectionRepository methods
+     * @var BlogPostLikeRepository - dependency for using LikeConnectionRepository methods
      */
     private $repository;
 
@@ -40,7 +40,7 @@ class BlogPostLiker
                                 Security $security, 
                                 PostLikeCounterManager $counterManager)
     {
-        $this->repository = $entityManager->getRepository(LikeConnection::class);
+        $this->repository = $entityManager->getRepository(BlogPostLike::class);
         $this->security = $security;
         $this->counterManager = $counterManager;
     }

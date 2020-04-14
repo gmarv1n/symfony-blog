@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\LikeConnection;
+use App\Entity\BlogPostLike;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -12,7 +12,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method LikeConnection[]    findAll()
  * @method LikeConnection[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class LikeConnectionRepository extends ServiceEntityRepository
+class BlogPostLikeRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -23,13 +23,13 @@ class LikeConnectionRepository extends ServiceEntityRepository
       * @return LikeConnection Returns a LikeConnection object
       */
     
-    public function getLikeConnection($postSlug, $userName)
+    public function getLikeConnection($postId, $userId)
     {
         return $this->createQueryBuilder('l')
-            ->andWhere('l.post_slug = :postSlug')
-            ->andWhere('l.user_name = :userName')
-            ->setParameter('postSlug', $postSlug)
-            ->setParameter('userName', $userName)
+            ->andWhere('l.post_id = :postId')
+            ->andWhere('l.user_id = :userId')
+            ->setParameter('postId', $postId)
+            ->setParameter('userId', $userId)
             ->getQuery()
             ->getOneOrNullResult()
         ;
@@ -39,13 +39,13 @@ class LikeConnectionRepository extends ServiceEntityRepository
       * @return true if like connection with argument fields extists
       */
     
-      public function isLikeConnectionExtists($userName, $postSlug) : Bool
+      public function isLikeConnectionExtists($userId, $postId) : Bool
       {
         $likeConnection = $this->createQueryBuilder('l')
-                               ->andWhere('l.post_slug = :postSlug')
-                               ->andWhere('l.user_name = :userName')
-                               ->setParameter('postSlug', $postSlug)
-                               ->setParameter('userName', $userName)
+                               ->andWhere('l.post_id = :postId')
+                               ->andWhere('l.user_id = :userId')
+                               ->setParameter('postId', $postId)
+                               ->setParameter('userId', $userId)
                                ->getQuery()
                                ->getOneOrNullResult();
         if ( $likeConnection != null ) {
@@ -56,29 +56,29 @@ class LikeConnectionRepository extends ServiceEntityRepository
           
       }
 
-    public function writeLikeConnection(string $userName, string $postSlug) :Void
+    public function writeLikeConnection(string $userId, string $postId) :Void
     {
         $dbConnection = $this->getEntityManager()->getConnection();
 
         $sqlRequest = '
-            INSERT INTO like_connection (user_name, post_slug)
-            VALUES (:userName, :postSlug)
+            INSERT INTO blog_post_like (user_id, post_id)
+            VALUES (:userId, :postId)
             ';
         $request = $dbConnection->prepare($sqlRequest);
-        $request->execute(['userName' => $userName, 'postSlug' => $postSlug]);
+        $request->execute(['userId' => $userId, 'postId' => $postId]);
     }
 
-    public function removeLikeConnection(string $userName, string $postSlug) :Void
+    public function removeLikeConnection(string $userId, string $postId) :Void
     {
         $dbConnection = $this->getEntityManager()->getConnection();
 
         $sqlRequest = '
-            DELETE FROM like_connection
-            WHERE user_name = :userName 
-            AND post_slug = :postSlug
+            DELETE FROM blog_post_like
+            WHERE user_name = :userId 
+            AND post_slug = :postId
             ';
         $request = $dbConnection->prepare($sqlRequest);
-        $request->execute(['userName' => $userName, 'postSlug' => $postSlug]);
+        $request->execute(['userId' => $userId, 'postId' => $postId]);
     }
     
 
