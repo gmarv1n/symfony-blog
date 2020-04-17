@@ -54,7 +54,7 @@ class BlogPostController extends AbstractController
     /**
      * @Route("/{slug}", name="blog_post_show", methods={"GET"})
      */
-    public function show(BlogPost $blogPost, LikeUrlGenerator $likeUrlGenerator, AuthorshipChecker $authorshipChecker): Response
+    public function show(BlogPost $blogPost, LikeUrlGenerator $likeUrlGenerator/*, AuthorshipChecker $authorshipChecker */): Response
     {
         
         $postSlug = $blogPost->getSlug();
@@ -67,13 +67,13 @@ class BlogPostController extends AbstractController
         // to show the delete button and edit button, so just the author of post (and admin) 
         // can delete the post
 
-        $isAuthor = $authorshipChecker->isAuthor($blogPost);
+        // $isAuthor = $authorshipChecker->isAuthor($blogPost);
 
         return $this->render('blog_post/show.html.twig', [
             'blog_post'     => $blogPost, 
             'like_post_url' => $likeUrl['url'], 
             'likeUrlText'   => $likeUrl['urlText'],
-            'isAuthor'      => $isAuthor
+            //'isAuthor'      => $isAuthor
         ]);
     }
 
@@ -116,12 +116,10 @@ class BlogPostController extends AbstractController
      */
     public function like(BlogPost $blogPost, BlogPostLiker $liker): Response
     {   
-        $postSlug = $blogPost->getSlug();
-        $liker->like($postSlug);
-
-        $blogPostId = $blogPost->getId();
+        $postId = $blogPost->getId();
+        $liker->like($postId);
         
-        return $this->redirectToRoute('blog_post_show', ['id' => $blogPostId]);
+        return $this->redirectToRoute('blog_post_show', ['slug' => $blogPost->getSlug()]);
     }
 
     /** 
@@ -129,12 +127,10 @@ class BlogPostController extends AbstractController
      */
     public function unlike(BlogPost $blogPost, BlogPostLiker $liker): Response
     {
-        $postSlug = $blogPost->getSlug();
-        $liker->unlike($postSlug);
-
-        $blogPostId = $blogPost->getId();
+        $postId = $blogPost->getId();
+        $liker->unlike($postId);
         
-        return $this->redirectToRoute('blog_post_show', ['id' => $blogPostId]);
+        return $this->redirectToRoute('blog_post_show', ['slug' => $blogPost->getSlug()]);
     }
 
 }

@@ -35,33 +35,33 @@ class BlogPostRepository extends ServiceEntityRepository
     /**
      * Increments likes_count field
      */
-    public function incrementPostLikeCountField(string $slug)
+    public function incrementPostLikeCountField(string $postId)
     {
         $conn = $this->getEntityManager()->getConnection();
 
         $sql = '
             UPDATE blog_post
             SET likes_count = likes_count + 1 
-            WHERE slug = :postSlug
+            WHERE id = UUID_TO_BIN(:postId)
             ';
         $stmt = $conn->prepare($sql);
-        $stmt->execute(['postSlug' => $slug]);
+        $stmt->execute(['postId' => $postId]);
     }
 
     /**
      * Decrements likes_count field
      */
-    public function decrementPostLikeCountField(string $slug)
+    public function decrementPostLikeCountField(string $postId)
     {
         $conn = $this->getEntityManager()->getConnection();
 
         $sql = '
             UPDATE blog_post
             SET likes_count = likes_count - 1 
-            WHERE slug = :postSlug
+            WHERE id = UUID_TO_BIN(:postId)
             ';
         $stmt = $conn->prepare($sql);
-        $stmt->execute(['postSlug' => $slug]);
+        $stmt->execute(['postId' => $postId]);
     }
 
     // /**

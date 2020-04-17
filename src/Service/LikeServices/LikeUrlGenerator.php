@@ -61,16 +61,16 @@ class LikeUrlGenerator
     {
         $urlArray = [];
         if ( $this->security->getUser() ) {
-            $userName =$this->security->getUser()->getUserName();
+            $userId =$this->security->getUser()->getId();
             
-            $isAlreadyLiked = $this->blogPostLiker->isLiked($postSlug);
+            $isAlreadyLiked = $this->blogPostLiker->isLiked($blogPostId);
 
             if ( $isAlreadyLiked ) {
                 $urlArray['urlText'] = "Unlike!";
-                $urlArray['url'] = $this->router->generate('blog_post_unlike', ['id' => $blogPostId]);
+                $urlArray['url'] = $this->router->generate('blog_post_unlike', ['slug' => $postSlug]);
             } if ( !$isAlreadyLiked ) {
                 $urlArray['urlText'] = "Like!";
-                $urlArray['url'] = $this->router->generate('blog_post_like', ['id' => $blogPostId]);
+                $urlArray['url'] = $this->router->generate('blog_post_like', ['slug' => $postSlug]);
             }
             return $urlArray;
         } else {

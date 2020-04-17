@@ -5,7 +5,6 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -14,8 +13,10 @@ use Ramsey\Uuid\Uuid;
 class User implements UserInterface
 {
     /**
-     * @ORM\Id()
-     * @ORM\Column(type="string", length=255, nullable=false)
+     * @ORM\Id
+     * @ORM\Column(type="uuid_binary", unique=true)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
     private $id;
 
@@ -39,12 +40,6 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
-
-    public function __construct()
-    {   
-        $uuid = Uuid::uuid4();
-        $this->id = $uuid->toString();
-    }
 
     public function getId(): ?String
     {

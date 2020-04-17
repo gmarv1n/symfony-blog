@@ -5,8 +5,6 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Ramsey\Uuid\Uuid;
-
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\BlogPostRepository")
@@ -15,8 +13,10 @@ use Ramsey\Uuid\Uuid;
 class BlogPost
 {
     /**
-     * @ORM\Id()
-     * @ORM\Column(type="string", length=255, nullable=false)
+     * @ORM\Id
+     * @ORM\Column(type="uuid_binary", unique=true)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
     private $id;
 
@@ -91,14 +91,7 @@ class BlogPost
      */
     private $comments_count;
 
-    
-    public function __construct()
-    {   
-        $uuid = Uuid::uuid4();
-        $this->id = $uuid->toString();
-    }
-
-    public function getId(): String
+    public function getId()
     {
         return $this->id;
     }

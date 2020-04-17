@@ -11,17 +11,23 @@
 
 namespace App\Service\LikeServices;
 
-use App\Entity\LikeConnection;
+use App\Entity\PostLike;
+use App\Entity\BlogPost;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 use App\Service\LikeServices\PostLikeCounterManager;
+use Ramsey\Uuid\Uuid;
 
 class BlogPostLiker
 {
     /**
-     * @var BlogPostLikeRepository - dependency for using LikeConnectionRepository methods
+     * @var PostLikeRepository 
      */
-    private $repository;
+    private $postLikeRepository;
+    /**
+     * @var BlogPostRepository 
+     */
+    private $BlogPostRepository;
 
     /**
      * @var Security  - dependency for getting a user
@@ -40,7 +46,8 @@ class BlogPostLiker
                                 Security $security, 
                                 PostLikeCounterManager $counterManager)
     {
-        $this->repository = $entityManager->getRepository(BlogPostLike::class);
+        $this->postLikeRepository = $entityManager->getRepository(PostLike::class);
+        $this->blogPostRepository = $entityManager->getRepository(BlogPost::class);
         $this->security = $security;
         $this->counterManager = $counterManager;
     }
@@ -52,15 +59,15 @@ class BlogPostLiker
      * then call writeLikeConnection() in LikeConnectionRepository and increments
      * the likes_count with PostLikeCounterManager's incrementLikeCoune()
      * 
-     * @param string $postSlug - the slig of post wich is being liking
+     *
      * 
      * @return void
      */
-    public function like(string $postSlug) : Void
+    public function like(Uuid $postId) : Void
     {
-        $userName = $this->security->getUser()->getUserName();
-        $this->repository->writeLikeConnection($userName, $postSlug);
-        $this->counterManager->incrementLikeCount($postSlug);
+        $userId = $this->security->getUser()->getId();
+        $this->postLikeRepository->writeLike($userId, $postId);
+        $this->blogPostRepository->incrementPostLikeCountField($postId);
     }
 
     /**
@@ -70,15 +77,15 @@ class BlogPostLiker
      * then call removeLikeConnection() in LikeConnectionRepository and decrements
      * the likes_count with PostLikeCounterManager's decrementLikeCoune()
      * 
-     * @param string $postSlug - the slig of post wich is being liking
+     * 
      * 
      * @return void
      */
-    public function unlike(string $postSlug) : Void
+    public function unlike(string $postId) : Void
     {
-        $userName = $this->security->getUser()->getUserName();
-        $this->repository->removeLikeConnection($userName, $postSlug);
-        $this->counterManager->decrementLikeCount($postSlug);
+        $userId = $this->security->getUser()->getId();
+        $this->postLikeRepository->removeLike($userId, $postId);
+        $this->blogPostRepository->decrementPostLikeCountField($postId);
     }
 
     /**
@@ -89,14 +96,14 @@ class BlogPostLiker
      * if the like note in table like_connection already exists with this
      * parameters and return true or false
      * 
-     * @param string $postSlug - the slug of post wich is being liking
+     * 
      * 
      * @return boolean
      */
-    public function isLiked(string $postSlug) : Bool
+    public function isLiked(string $postId) : Bool
     {
-        $userName = $this->security->getUser()->getUserName();
+        $userId = $this->security->getUser()->getId();
 
-        return $this->repository->isLikeConnectionExtists($userName, $postSlug);
+        return $this->postLikeRepository->isLikeExtist($userId, $postId);
     }
 }

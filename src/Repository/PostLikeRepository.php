@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\BlogPostLike;
+use App\Entity\PostLike;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -12,15 +12,15 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method LikeConnection[]    findAll()
  * @method LikeConnection[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class BlogPostLikeRepository extends ServiceEntityRepository
+class PostLikeRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, LikeConnection::class);
+        parent::__construct($registry, PostLike::class);
     }
 
     /**
-      * @return LikeConnection Returns a LikeConnection object
+      * @return PostLike[] 
       */
     
     public function getLikeConnection($postId, $userId)
@@ -39,13 +39,16 @@ class BlogPostLikeRepository extends ServiceEntityRepository
       * @return true if like connection with argument fields extists
       */
     
-      public function isLikeConnectionExtists($userId, $postId) : Bool
+      public function isLikeExtist($userId, $postId) : Bool
       {
+        $userIdBinary = 'UUID_TO_BIN('.$userId.')';
+        $postIdBinary = 'UUID_TO_BIN('.$postId.')';
+
         $likeConnection = $this->createQueryBuilder('l')
                                ->andWhere('l.post_id = :postId')
                                ->andWhere('l.user_id = :userId')
-                               ->setParameter('postId', $postId)
-                               ->setParameter('userId', $userId)
+                               ->setParameter('postId', $postIdBinary)
+                               ->setParameter('userId', $userIdBinary)
                                ->getQuery()
                                ->getOneOrNullResult();
         if ( $likeConnection != null ) {
@@ -56,26 +59,26 @@ class BlogPostLikeRepository extends ServiceEntityRepository
           
       }
 
-    public function writeLikeConnection(string $userId, string $postId) :Void
+    public function writeLike(string $userId, string $postId) :Void
     {
         $dbConnection = $this->getEntityManager()->getConnection();
 
         $sqlRequest = '
-            INSERT INTO blog_post_like (user_id, post_id)
-            VALUES (:userId, :postId)
+            INSERT INTO post_like (user_id, post_id)
+            VALUES (UUID_TO_BIN(:userId), UUID_TO_BIN(:postId) )
             ';
         $request = $dbConnection->prepare($sqlRequest);
         $request->execute(['userId' => $userId, 'postId' => $postId]);
     }
 
-    public function removeLikeConnection(string $userId, string $postId) :Void
+    public function removeLike(string $userId, string $postId) :Void
     {
         $dbConnection = $this->getEntityManager()->getConnection();
 
         $sqlRequest = '
-            DELETE FROM blog_post_like
-            WHERE user_name = :userId 
-            AND post_slug = :postId
+            DELETE FROM post_like
+            WHERE user_id = UUID_TO_BIN(:userId)
+            AND post_id = UUID_TO_BIN(:postId)
             ';
         $request = $dbConnection->prepare($sqlRequest);
         $request->execute(['userId' => $userId, 'postId' => $postId]);
