@@ -28,7 +28,8 @@ class BlogPostType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $todayDate = new DateTime("NOW");
-        $authorName = $this->security->getUser()->getUserName();
+        $authorNick = $this->security->getUser()->getUserNickName();
+        $authorId = $this->security->getUser()->getId();
 
         $builder
             ->add('title')
@@ -50,8 +51,11 @@ class BlogPostType extends AbstractType
             ->add('date', DateTimeType::class, [
                 'data' => $todayDate,
             ])
-            ->add('author_name', HiddenType::class, [
-                'data' => $authorName,
+            ->add('author_nick', TextType::class, [
+                'data' => $authorNick,
+            ])
+            ->add('author_id', TextType::class, [
+                'data' => $authorId,
             ])
             ->add('likes_count') //, HiddenType::class
             ->add('comments_count') //, HiddenType::class

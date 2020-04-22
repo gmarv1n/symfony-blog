@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\PostLike;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Gregory\UuidToBinBundle\Doctrine\ORM\Query\UUID\Functions\UuidToBinFunction;
 
 /**
  * @method LikeConnection|null find($id, $lockMode = null, $lockVersion = null)
@@ -41,14 +42,14 @@ class PostLikeRepository extends ServiceEntityRepository
     
       public function isLikeExtist($userId, $postId) : Bool
       {
-        $userIdBinary = 'UUID_TO_BIN('.$userId.')';
-        $postIdBinary = 'UUID_TO_BIN('.$postId.')';
+        // $userIdBinary = 'UUID_TO_BIN('.$userId.')';
+        // $postIdBinary = 'UUID_TO_BIN('.$postId.')';
 
         $likeConnection = $this->createQueryBuilder('l')
-                               ->andWhere('l.post_id = :postId')
-                               ->andWhere('l.user_id = :userId')
-                               ->setParameter('postId', $postIdBinary)
-                               ->setParameter('userId', $userIdBinary)
+                               ->andWhere('l.post_id = UUID_TO_BIN(:postId)')
+                               ->andWhere('l.user_id = UUID_TO_BIN(:userId)')
+                               ->setParameter('postId', $postId)
+                               ->setParameter('userId', $userId)
                                ->getQuery()
                                ->getOneOrNullResult();
         if ( $likeConnection != null ) {

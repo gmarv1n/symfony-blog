@@ -79,7 +79,12 @@ class BlogPost
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $author_name;
+    private $author_nick;
+
+    /**
+     * @ORM\Column(type="uuid_binary")
+     */
+    private $author_id;
 
     /**
      * @ORM\Column(type="integer")
@@ -228,15 +233,27 @@ class BlogPost
         return $this;
     }
 
-    public function getAuthorName(): ?string
+    public function getAuthorNick(): ?string
     {
-        return $this->author_name;
+        return $this->author_nick;
     }
 
-    public function setAuthorName(string $author_name): self
+    public function setAuthorNick(string $author_nick): self
     {
-        $this->author_name = $author_name;
+        $this->author_nick = $author_nick;
 
+        return $this;
+    }
+
+    public function getAuthorId()//: ?string
+    {
+        return $this->author_id;
+    }
+
+    public function setAuthorId(string $author_id): self
+    {
+        $this->author_id = $author_id;
+        
         return $this;
     }
 

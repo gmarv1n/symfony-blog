@@ -44,7 +44,11 @@
             </tr>
             <tr>
                 <th>Author_name</th>
-                <td>{{ blog_post.authorName }}</td>
+                <td>{{ blog_post.authorNick }}</td>
+            </tr>
+            <tr>
+                <th>Author_Id</th>
+                <td>{{ blog_post.authorId }}</td>
             </tr>
             <tr>
                 <th>Likes_counter</th>
@@ -73,6 +77,6 @@
     {% endif %}  #}
     {# Summoning the comments list #}
     {{ render(controller(
-            'App\\Controller\\CommentController::getCommentsListByPost', {postSlug: blog_post.slug}
+            'App\\Controller\\CommentController::getCommentsListByPostId', {postId: blog_post.id}
         )) }}
 {% endblock %}
