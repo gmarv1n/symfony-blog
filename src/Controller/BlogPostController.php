@@ -54,13 +54,15 @@ class BlogPostController extends AbstractController
     /**
      * @Route("/{slug}", name="blog_post_show", methods={"GET"})
      */
-    public function show(BlogPost $blogPost, LikeUrlGenerator $likeUrlGenerator/*, AuthorshipChecker $authorshipChecker */): Response
+    public function show(BlogPost $blogPost, BlogPostLiker $liker/*, AuthorshipChecker $authorshipChecker */): Response
     {
         
         $postSlug = $blogPost->getSlug();
-        $blogPostId = $blogPost->getId();
+        $postId = $blogPost->getId();
 
-        $likeUrl = $likeUrlGenerator->generateLikeUrl($postSlug, $blogPostId);
+        $isAlreadyLiked = $liker->isLiked($postId);
+
+        // $likeUrl = $likeUrlGenerator->generateLikeUrl($blogPostId);
 
         // $isAuthor variable recieve re result of AuthorShipChecker's method isAuthor() and
         // send it to a view as 'isAuthor' wich is uses in logic inside of view to show or not
@@ -71,8 +73,8 @@ class BlogPostController extends AbstractController
 
         return $this->render('blog_post/show.html.twig', [
             'blog_post'     => $blogPost, 
-            'like_post_url' => $likeUrl['url'], 
-            'likeUrlText'   => $likeUrl['urlText'],
+            'isLiked'       => $isAlreadyLiked,
+            'stringPostId'  => $postId->toString(),
             //'isAuthor'      => $isAuthor
         ]);
     }

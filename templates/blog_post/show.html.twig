@@ -18,8 +18,16 @@
     <table class="table">
         <tbody>
             <tr>
+                <th>ID</th>
+                <td>{{ blog_post.id }}</td>
+            </tr>
+            <tr>
                 <th>Title</th>
                 <td>{{ blog_post.title }}</td>
+            </tr>
+            <tr>
+                <th>Slug</th>
+                <td>{{ blog_post.slug }}</td>
             </tr>
             <tr>
                 <th>Image_name</th>
@@ -66,8 +74,10 @@
         <a href="{{ path('blog_post_edit', {'id': blog_post.id}) }}">edit</a>
     {% endif %}  #}
     <br><br>  
-    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-        <a href="{{ like_post_url }}"><strong>{{ likeUrlText }}</strong></a>
+    {% if is_granted('IS_AUTHENTICATED_FULLY') and isLiked == false %}
+        <a href="{{ path('blog_post_like', {slug: blog_post.slug}) }}"><strong>Like!</strong></a>
+    {% elseif is_granted('IS_AUTHENTICATED_FULLY') and isLiked == true %}
+        <a href="{{ path('blog_post_unlike', {slug: blog_post.slug}) }}"><strong>Unlike!</strong></a>
     {% else %}
         <span class="unlike-link-unactive" title="Only registered users can like a post"><strong>Like</strong></span>
     {% endif %}
@@ -76,7 +86,9 @@
         {{ include('blog_post/_delete_form.html.twig') }}
     {% endif %}  #}
     {# Summoning the comments list #}
+
     {{ render(controller(
-            'App\\Controller\\CommentController::getCommentsListByPostId', {postId: blog_post.id}
-        )) }}
+            'App\\Controller\\CommentController::getCommentsListByPostId', {postId: stringPostId}
+        )) }} 
+
 {% endblock %}

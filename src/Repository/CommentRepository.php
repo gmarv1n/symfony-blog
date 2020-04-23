@@ -28,8 +28,8 @@ class CommentRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.post_id = UUID_TO_BIN(:postId)')
-            ->setParameter('val', $postId)
-            ->orderBy('c.id', 'ASC')
+            ->setParameter('postId', $postId)
+            ->orderBy('c.date', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()

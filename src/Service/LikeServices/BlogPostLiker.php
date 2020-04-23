@@ -102,8 +102,11 @@ class BlogPostLiker
      */
     public function isLiked(string $postId) : Bool
     {
-        $userId = $this->security->getUser()->getId();
-
-        return $this->postLikeRepository->isLikeExtist($userId, $postId);
+        if ($this->security->getUser()) {
+            $userId = $this->security->getUser()->getId();
+            return $this->postLikeRepository->isLikeExtist($userId, $postId);
+        } else {
+            return false;
+        }
     }
 }
