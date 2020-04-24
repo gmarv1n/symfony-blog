@@ -39,10 +39,10 @@ class AuthorshipChecker
     public function isAuthor(BlogPost $blogPost) : bool
     {
         if ( $this->security->getUser() ) {
-            $userName = $this->security->getUser()->getUserName();
-            $postAuthor = $blogPost->getAuthorName();
+            $userId = $this->security->getUser()->getId();
+            $postAuthor = $blogPost->getAuthorId()->toString();
 
-            if ( $userName === $postAuthor ) {
+            if ( $userId === $postAuthor ) {
                 return true;
             }
         }

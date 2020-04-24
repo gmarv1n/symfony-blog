@@ -15,7 +15,6 @@ use App\Entity\PostLike;
 use App\Entity\BlogPost;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
-use App\Service\LikeServices\PostLikeCounterManager;
 use Ramsey\Uuid\Uuid;
 
 class BlogPostLiker
@@ -43,13 +42,11 @@ class BlogPostLiker
      * Constructor for initializing private variables.
      */
     public function __construct(EntityManagerInterface $entityManager, 
-                                Security $security, 
-                                PostLikeCounterManager $counterManager)
+                                Security $security)
     {
         $this->postLikeRepository = $entityManager->getRepository(PostLike::class);
         $this->blogPostRepository = $entityManager->getRepository(BlogPost::class);
         $this->security = $security;
-        $this->counterManager = $counterManager;
     }
 
     /**
@@ -67,7 +64,7 @@ class BlogPostLiker
     {
         $userId = $this->security->getUser()->getId();
         $this->postLikeRepository->writeLike($userId, $postId);
-        $this->blogPostRepository->incrementPostLikeCountField($postId);
+        $this->blogPostRepository->incrementPostLikeCount($postId);
     }
 
     /**
@@ -81,11 +78,11 @@ class BlogPostLiker
      * 
      * @return void
      */
-    public function unlike(string $postId) : Void
+    public function unlike(Uuid $postId) : Void
     {
         $userId = $this->security->getUser()->getId();
         $this->postLikeRepository->removeLike($userId, $postId);
-        $this->blogPostRepository->decrementPostLikeCountField($postId);
+        $this->blogPostRepository->decrementPostLikeCount($postId);
     }
 
     /**
@@ -100,7 +97,7 @@ class BlogPostLiker
      * 
      * @return boolean
      */
-    public function isLiked(string $postId) : Bool
+    public function isLiked(Uuid $postId) : Bool
     {
         if ($this->security->getUser()) {
             $userId = $this->security->getUser()->getId();

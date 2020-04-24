@@ -70,9 +70,9 @@
     </table>
 
     <a href="{{ path('blog_post_index') }}">back to list</a>
-{#    {% if isAuthor == true %}
-        <a href="{{ path('blog_post_edit', {'id': blog_post.id}) }}">edit</a>
-    {% endif %}  #}
+    {% if isAuthor == true %}
+        <a href="{{ path('blog_post_edit', {'slug': blog_post.slug}) }}">edit</a>
+    {% endif %}  
     <br><br>  
     {% if is_granted('IS_AUTHENTICATED_FULLY') and isLiked == false %}
         <a href="{{ path('blog_post_like', {slug: blog_post.slug}) }}"><strong>Like!</strong></a>
@@ -82,9 +82,9 @@
         <span class="unlike-link-unactive" title="Only registered users can like a post"><strong>Like</strong></span>
     {% endif %}
     <br><br>
-{#    {% if isAuthor == true %}
+    {% if isAuthor == true %}
         {{ include('blog_post/_delete_form.html.twig') }}
-    {% endif %}  #}
+    {% endif %}  
     {# Summoning the comments list #}
 
     {{ render(controller(

@@ -35,7 +35,7 @@ class BlogPostRepository extends ServiceEntityRepository
     /**
      * Increments likes_count field
      */
-    public function incrementPostLikeCountField(string $postId)
+    public function incrementPostLikeCount(string $postId)
     {
         $conn = $this->getEntityManager()->getConnection();
 
@@ -51,7 +51,7 @@ class BlogPostRepository extends ServiceEntityRepository
     /**
      * Decrements likes_count field
      */
-    public function decrementPostLikeCountField(string $postId)
+    public function decrementPostLikeCount(string $postId)
     {
         $conn = $this->getEntityManager()->getConnection();
 

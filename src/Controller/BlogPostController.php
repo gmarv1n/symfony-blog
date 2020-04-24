@@ -9,7 +9,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Service\LikeServices\LikeUrlGenerator;
 use App\Service\PostServices\AuthorshipChecker;
 use App\Service\LikeServices\BlogPostLiker;
 
@@ -54,7 +53,7 @@ class BlogPostController extends AbstractController
     /**
      * @Route("/{slug}", name="blog_post_show", methods={"GET"})
      */
-    public function show(BlogPost $blogPost, BlogPostLiker $liker/*, AuthorshipChecker $authorshipChecker */): Response
+    public function show(BlogPost $blogPost, BlogPostLiker $liker, AuthorshipChecker $authorshipChecker ): Response
     {
         
         $postSlug = $blogPost->getSlug();
@@ -62,20 +61,18 @@ class BlogPostController extends AbstractController
 
         $isAlreadyLiked = $liker->isLiked($postId);
 
-        // $likeUrl = $likeUrlGenerator->generateLikeUrl($blogPostId);
-
         // $isAuthor variable recieve re result of AuthorShipChecker's method isAuthor() and
         // send it to a view as 'isAuthor' wich is uses in logic inside of view to show or not
         // to show the delete button and edit button, so just the author of post (and admin) 
         // can delete the post
 
-        // $isAuthor = $authorshipChecker->isAuthor($blogPost);
+        $isAuthor = $authorshipChecker->isAuthor($blogPost);
 
         return $this->render('blog_post/show.html.twig', [
             'blog_post'     => $blogPost, 
             'isLiked'       => $isAlreadyLiked,
             'stringPostId'  => $postId->toString(),
-            //'isAuthor'      => $isAuthor
+            'isAuthor'      => $isAuthor
         ]);
     }
 
