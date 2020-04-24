@@ -2,17 +2,15 @@
 
 namespace App\Controller;
 
-use App\Service\PostLikeCounterManager;
 use App\Entity\BlogPost;
 use App\Form\BlogPostType;
 use App\Repository\BlogPostRepository;
-use App\Entity\LikeConnection;
-use App\Repository\CommentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Controller\LikeConnectionController;
+use App\Service\PostServices\AuthorshipChecker;
+use App\Service\LikeServices\BlogPostLiker;
 
 /**
  * @Route("/blog")
@@ -53,32 +51,33 @@ class BlogPostController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="blog_post_show", methods={"GET"})
+     * @Route("/{slug}", name="blog_post_show", methods={"GET"})
      */
-    public function show(BlogPost $blogPost): Response
+    public function show(BlogPost $blogPost, BlogPostLiker $liker, AuthorshipChecker $authorshipChecker ): Response
     {
-        // Generate url for LikeConnection 
-        $blogPostId = $blogPost->getId();
-        $likeUrl = null;
-        $likeUrlText = null;
+        
+        $postSlug = $blogPost->getSlug();
+        $postId = $blogPost->getId();
 
-        $isAlreadyLiked = $this->checkTheLikeExistence($blogPost);
+        $isAlreadyLiked = $liker->isLiked($postId);
 
-        if ( $isAlreadyLiked ) {
-            $likeUrlText = "Unlike!";
-            $likeUrl = $this->generateUrl('blog_post_unlike', ['id' => $blogPostId]);
-        } if ( !$isAlreadyLiked ) {
-            $likeUrlText = "Like!";
-            $likeUrl = $this->generateUrl('blog_post_like', ['id' => $blogPostId]);
-        }
+        // $isAuthor variable recieve re result of AuthorShipChecker's method isAuthor() and
+        // send it to a view as 'isAuthor' wich is uses in logic inside of view to show or not
+        // to show the delete button and edit button, so just the author of post (and admin) 
+        // can delete the post
+
+        $isAuthor = $authorshipChecker->isAuthor($blogPost);
 
         return $this->render('blog_post/show.html.twig', [
-            'blog_post' => $blogPost, 'like_post_url' => $likeUrl, 'likeUrlText' => $likeUrlText
+            'blog_post'     => $blogPost, 
+            'isLiked'       => $isAlreadyLiked,
+            'stringPostId'  => $postId->toString(),
+            'isAuthor'      => $isAuthor
         ]);
     }
 
     /**
-     * @Route("/{id}/edit", name="blog_post_edit", methods={"GET","POST"})
+     * @Route("/{slug}/edit", name="blog_post_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, BlogPost $blogPost): Response
     {
@@ -98,7 +97,7 @@ class BlogPostController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="blog_post_delete", methods={"DELETE"})
+     * @Route("/{slug}", name="blog_post_delete", methods={"DELETE"})
      */
     public function delete(Request $request, BlogPost $blogPost): Response
     {
@@ -112,88 +111,25 @@ class BlogPostController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/like", name="blog_post_like", methods={"GET"})
+     * @Route("/{slug}/like", name="blog_post_like", methods={"GET"})
      */
-    public function like(BlogPost $blogPost, PostLikeCounterManager $counterManager): Response
-    {
-        // This function call the like_the_post route in LikeConnection controller   
+    public function like(BlogPost $blogPost, BlogPostLiker $liker): Response
+    {   
+        $postId = $blogPost->getId();
+        $liker->like($postId);
         
-        // Getting a @string postSlug from blogPost obj
-        $postSlug = $blogPost->getSlug();
-        
-        // Just some test code {
-
-        $blogLikesCounter = $blogPost->getLikesCounter();
-        
-        $counterManager->incrementLikeCounter($blogPost);
-
-        // } Just some test code 
-
-        //$this->incrementLikeCounter($blogPost);
-        return $this->redirectToRoute('create_like', ['postSlug' => $postSlug]);
+        return $this->redirectToRoute('blog_post_show', ['slug' => $blogPost->getSlug()]);
     }
 
-    /**
-     * This function increments like counter field
+    /** 
+     * @Route("/{slug}/unlike", name="blog_post_unlike", methods={"GET"})
      */
-
-    public function incrementLikeCounter(BlogPost $blogPost) : void
+    public function unlike(BlogPost $blogPost, BlogPostLiker $liker): Response
     {
-        $postLikesCounter = $blogPost->getLikesCounter();
-        $postLikesCounter++;
-        $blogPost->setLikesCounter($postLikesCounter);
-
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($blogPost);
-        $entityManager->flush();
-    }
-
-    /**
-     * @Route("/{id}/unlike", name="blog_post_unlike", methods={"GET"})
-     */
-    public function unlike(BlogPost $blogPost): Response
-    {
-        // This function call the delete_like route in LikeConnection controller   
+        $postId = $blogPost->getId();
+        $liker->unlike($postId);
         
-        // Getting a @string postSlug from blogPost obj
-        $postSlug = $blogPost->getSlug();
-
-        $this->decrementLikeCounter($blogPost);
-        return $this->redirectToRoute('delete_like', ['postSlug' => $postSlug]);
+        return $this->redirectToRoute('blog_post_show', ['slug' => $blogPost->getSlug()]);
     }
 
-    /**
-     * This function decrements like counter field
-     */
-
-    public function decrementLikeCounter(BlogPost $blogPost) : void
-    {
-        $postLikesCounter = $blogPost->getLikesCounter();
-        $postLikesCounter--;
-        $blogPost->setLikesCounter($postLikesCounter);
-
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($blogPost);
-        $entityManager->flush();
-    }  
-
-    /**
-     * Check is post already liked by logged user
-     */
-
-    public function checkTheLikeExistence(BlogPost $blogPost) : Bool
-    {
-        $userName = $this->getUser()
-                         ->getUserName();
-        $postSlug = $blogPost->getSlug();
-
-        $isAlreadyLiked = $this->getDoctrine()
-                               ->getRepository(LikeConnection::class)
-                               ->isLikeConnectionExtists($postSlug, $userName);
-        if ($isAlreadyLiked) {
-            return true;
-        } else if ( !$isAlreadyLiked ) {
-            return false;
-        }
-    } 
 }

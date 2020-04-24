@@ -10,21 +10,22 @@ use Doctrine\ORM\Mapping as ORM;
 class Comment
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\Column(type="uuid_binary", unique=true)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="uuid_binary", nullable=false)
      */
-    private $user_name;
+    private $author_id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="uuid_binary", nullable=false)
      */
-    private $post_slug;
+    private $post_id;
 
     /**
      * @ORM\Column(type="text")
@@ -41,31 +42,31 @@ class Comment
      */
     private $date;
 
-    public function getId(): ?int
+    public function getId(): ?String
     {
         return $this->id;
     }
 
-    public function getUserName(): ?string
+    public function getAuthorId(): ?string
     {
-        return $this->user_name;
+        return $this->author_id;
     }
 
-    public function setUserName(string $user_name): self
+    public function setAuthorId(string $author_id): self
     {
-        $this->user_name = $user_name;
+        $this->author_id = $author_id;
 
         return $this;
     }
 
-    public function getPostSlug(): ?string
+    public function getPostId(): ?string
     {
-        return $this->post_slug;
+        return $this->post_id;
     }
 
-    public function setPostSlug(string $post_slug): self
+    public function setPostId(string $post_id): self
     {
-        $this->post_slug = $post_slug;
+        $this->post_id = $post_id;
 
         return $this;
     }

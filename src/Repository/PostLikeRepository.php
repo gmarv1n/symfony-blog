@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
-use App\Entity\LikeConnection;
+use App\Entity\PostLike;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Gregory\UuidToBinBundle\Doctrine\ORM\Query\UUID\Functions\UuidToBinFunction;
 
 /**
  * @method LikeConnection|null find($id, $lockMode = null, $lockVersion = null)
@@ -12,24 +13,24 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method LikeConnection[]    findAll()
  * @method LikeConnection[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class LikeConnectionRepository extends ServiceEntityRepository
+class PostLikeRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, LikeConnection::class);
+        parent::__construct($registry, PostLike::class);
     }
 
     /**
-      * @return LikeConnection Returns a LikeConnection object
+      * @return PostLike[] 
       */
     
-    public function getLikeConnection($postSlug, $userName)
+    public function getLikeConnection($postId, $userId)
     {
         return $this->createQueryBuilder('l')
-            ->andWhere('l.post_slug = :postSlug')
-            ->andWhere('l.user_name = :userName')
-            ->setParameter('postSlug', $postSlug)
-            ->setParameter('userName', $userName)
+            ->andWhere('l.post_id = :postId')
+            ->andWhere('l.user_id = :userId')
+            ->setParameter('postId', $postId)
+            ->setParameter('userId', $userId)
             ->getQuery()
             ->getOneOrNullResult()
         ;
@@ -39,13 +40,16 @@ class LikeConnectionRepository extends ServiceEntityRepository
       * @return true if like connection with argument fields extists
       */
     
-      public function isLikeConnectionExtists($postSlug, $userName) : Bool
+      public function isLikeExtist($userId, $postId) : Bool
       {
+        // $userIdBinary = 'UUID_TO_BIN('.$userId.')';
+        // $postIdBinary = 'UUID_TO_BIN('.$postId.')';
+
         $likeConnection = $this->createQueryBuilder('l')
-                               ->andWhere('l.post_slug = :postSlug')
-                               ->andWhere('l.user_name = :userName')
-                               ->setParameter('postSlug', $postSlug)
-                               ->setParameter('userName', $userName)
+                               ->andWhere('l.post_id = UUID_TO_BIN(:postId)')
+                               ->andWhere('l.user_id = UUID_TO_BIN(:userId)')
+                               ->setParameter('postId', $postId)
+                               ->setParameter('userId', $userId)
                                ->getQuery()
                                ->getOneOrNullResult();
         if ( $likeConnection != null ) {
@@ -56,16 +60,29 @@ class LikeConnectionRepository extends ServiceEntityRepository
           
       }
 
-    public function writeLikeConnection(string $slug)
+    public function writeLike(string $userId, string $postId) :Void
     {
         $dbConnection = $this->getEntityManager()->getConnection();
 
         $sqlRequest = '
-            INSERT INTO blog_post (user_name, post_slug)
-            VALUES (:userName, :postSlug)
+            INSERT INTO post_like (user_id, post_id)
+            VALUES (UUID_TO_BIN(:userId), UUID_TO_BIN(:postId) )
             ';
         $request = $dbConnection->prepare($sqlRequest);
-        $request->execute(['postSlug' => $slug]);
+        $request->execute(['userId' => $userId, 'postId' => $postId]);
+    }
+
+    public function removeLike(string $userId, string $postId) :Void
+    {
+        $dbConnection = $this->getEntityManager()->getConnection();
+
+        $sqlRequest = '
+            DELETE FROM post_like
+            WHERE user_id = UUID_TO_BIN(:userId)
+            AND post_id = UUID_TO_BIN(:postId)
+            ';
+        $request = $dbConnection->prepare($sqlRequest);
+        $request->execute(['userId' => $userId, 'postId' => $postId]);
     }
     
 
