@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\PostServices\AuthorshipChecker;
 use App\Service\LikeServices\BlogPostLiker;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @Route("/blog")
@@ -53,11 +55,17 @@ class BlogPostController extends AbstractController
     /**
      * @Route("/{slug}", name="blog_post_show", methods={"GET"})
      */
-    public function show(BlogPost $blogPost, BlogPostLiker $liker, AuthorshipChecker $authorshipChecker ): Response
+    public function show(BlogPost $blogPost, 
+                         BlogPostLiker $liker, 
+                         AuthorshipChecker $authorshipChecker,
+                         SessionInterface $session ): Response
     {
         
         $postSlug = $blogPost->getSlug();
         $postId = $blogPost->getId();
+
+        $likeToken = Uuid::uuid4();
+        $session->set('likeToken', $likeToken);
 
         $isAlreadyLiked = $liker->isLiked($postId);
 
@@ -72,7 +80,8 @@ class BlogPostController extends AbstractController
             'blog_post'     => $blogPost, 
             'isLiked'       => $isAlreadyLiked,
             'stringPostId'  => $postId->toString(),
-            'isAuthor'      => $isAuthor
+            'isAuthor'      => $isAuthor,
+            'likeToken'     => $likeToken
         ]);
     }
 
@@ -111,24 +120,39 @@ class BlogPostController extends AbstractController
     }
 
     /**
-     * @Route("/{slug}/like", name="blog_post_like", methods={"GET"})
+     * @Route("/{slug}/like", name="blog_post_like", methods={"POST"})
      */
-    public function like(BlogPost $blogPost, BlogPostLiker $liker): Response
+    public function like(BlogPost $blogPost, 
+                         BlogPostLiker $liker, 
+                         SessionInterface $session,
+                         Request $request): Response
     {   
-        $postId = $blogPost->getId();
-        $liker->like($postId);
-        
+        $sessionLikeToken = $session->get('likeToken')->toString();
+        $postLikeToken = $request->request->get('likeToken');
+
+        if ( $sessionLikeToken === $postLikeToken ) {
+            $postId = $blogPost->getId();
+            $liker->like($postId);
+        }
+        $session->remove('likeToken');
         return $this->redirectToRoute('blog_post_show', ['slug' => $blogPost->getSlug()]);
     }
 
     /** 
-     * @Route("/{slug}/unlike", name="blog_post_unlike", methods={"GET"})
+     * @Route("/{slug}/unlike", name="blog_post_unlike", methods={"POST"})
      */
-    public function unlike(BlogPost $blogPost, BlogPostLiker $liker): Response
+    public function unlike(BlogPost $blogPost, 
+                           BlogPostLiker $liker, 
+                           SessionInterface $session,
+                           Request $request): Response
     {
-        $postId = $blogPost->getId();
-        $liker->unlike($postId);
-        
+        $sessionLikeToken = $session->get('likeToken')->toString();
+        $postLikeToken = $request->request->get('likeToken');
+        if ( $sessionLikeToken === $postLikeToken ) {
+            $postId = $blogPost->getId();
+            $liker->unlike($postId);
+        }
+        $session->remove('likeToken');
         return $this->redirectToRoute('blog_post_show', ['slug' => $blogPost->getSlug()]);
     }
 
