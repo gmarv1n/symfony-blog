@@ -9,6 +9,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\PostServices\CommentsCountManager;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use DateTime;
 
 /**
  * @Route("/comment")
@@ -29,20 +34,46 @@ class CommentController extends AbstractController
      * @Route("/by_post", name="comment_index_for_post", methods={"GET"})
      * This method might determ what is the id of post and return all of comments for it
      */
-    public function getCommentsListByPostId(string $postId, CommentRepository $commentRepository): Response
+    public function showPostsComments(string $postId, CommentRepository $commentRepository): Response
     {
         return $this->render('comment/_comment_list_in_post.html.twig', [
             'comments' => $commentRepository->findCommentsByPostId($postId),
+            'postId'   => $postId,
         ]);
     }
 
     /**
-     * @Route("/new", name="comment_new", methods={"GET","POST"})
+     * @Route("/new/{postId}", name="comment_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(string $postId,
+                        Request $request,
+                        CommentsCountManager $commentsCountManager): Response
     {
+        /** @var \App\Entity\Comment $comment */
         $comment = new Comment();
-        $form = $this->createForm(CommentType::class, $comment);
+
+        $postSlug = $request->request->get('postSlug');
+
+        // $form = $this->createForm(CommentType::class, $comment);
+
+        $todayDate = new DateTime("NOW");
+
+        $userId = $this->getUser()->getId();
+
+        $form = $this->createFormBuilder($comment)
+                     ->add('author_id', TextType::class, [
+                        'data' => $userId,
+                         ])
+                     ->add('post_id', TextType::class, [
+                        'data' => $postId,
+                         ])
+                     ->add('comment')
+                     ->add('is_approved')
+                     ->add('date', DateTimeType::class, [
+                        'data' => $todayDate,
+                         ])
+                     ->getForm();
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -50,7 +81,9 @@ class CommentController extends AbstractController
             $entityManager->persist($comment);
             $entityManager->flush();
 
-            return $this->redirectToRoute('comment_index');
+            $commentsCountManager->increment($postId);
+
+            return $this->redirectToRoute('blog_post_show', ['slug' => $postSlug]);
         }
 
         return $this->render('comment/new.html.twig', [

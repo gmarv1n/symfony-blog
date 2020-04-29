@@ -103,7 +103,7 @@
     {# Summoning the comments list #}
 
     {{ render(controller(
-            'App\\Controller\\CommentController::getCommentsListByPostId', {postId: stringPostId}
+            'App\\Controller\\CommentController::showPostsComments', {postId: stringPostId, postSlug: blog_post.slug}
         )) }} 
 
 {% endblock %}

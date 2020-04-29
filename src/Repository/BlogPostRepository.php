@@ -64,6 +64,38 @@ class BlogPostRepository extends ServiceEntityRepository
         $stmt->execute(['postId' => $postId]);
     }
 
+    /**
+     * Increments comments_count field
+     */
+    public function incrementCommentsCount(string $postId)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+            UPDATE blog_post
+            SET comments_count = comments_count + 1 
+            WHERE id = UUID_TO_BIN(:postId)
+            ';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(['postId' => $postId]);
+    }
+
+    /**
+     * Decrements comments_count field
+     */
+    public function decrementCommentsCount(string $postId)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+            UPDATE blog_post
+            SET comments_count = comments_count - 1 
+            WHERE id = UUID_TO_BIN(:postId)
+            ';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(['postId' => $postId]);
+    }
+
     // /**
     //  * @return BlogPost[] Returns an array of BlogPost objects
     //  */
