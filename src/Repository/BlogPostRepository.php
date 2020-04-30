@@ -22,11 +22,11 @@ class BlogPostRepository extends ServiceEntityRepository
     /**
      * @return BlogPost[] Returns a BlogPost object
      */
-    public function findByPostSlugField($slug)
+    public function getPostById(string $id) : BlogPost
     {
         return $this->createQueryBuilder('b')
-            ->andWhere('b.slug = :slug')
-            ->setParameter('slug', $slug)
+            ->andWhere('b.id = UUID_TO_BIN(:id)')
+            ->setParameter('id', $id)
             ->getQuery()
             ->getOneOrNullResult()
         ;
@@ -35,8 +35,10 @@ class BlogPostRepository extends ServiceEntityRepository
     /**
      * Increments likes_count field
      */
-    public function incrementPostLikeCount(string $postId)
+    public function incrementPostLikeCount(BlogPost $post)
     {
+        $postId = $post->getId();
+        
         $conn = $this->getEntityManager()->getConnection();
 
         $sql = '
@@ -51,8 +53,10 @@ class BlogPostRepository extends ServiceEntityRepository
     /**
      * Decrements likes_count field
      */
-    public function decrementPostLikeCount(string $postId)
+    public function decrementPostLikeCount(BlogPost $post)
     {
+        $postId = $post->getId();
+
         $conn = $this->getEntityManager()->getConnection();
 
         $sql = '
@@ -67,8 +71,10 @@ class BlogPostRepository extends ServiceEntityRepository
     /**
      * Increments comments_count field
      */
-    public function incrementCommentsCount(string $postId)
+    public function incrementCommentsCount(BlogPost $post)
     {
+        $postId = $post->getId();
+
         $conn = $this->getEntityManager()->getConnection();
 
         $sql = '
@@ -83,8 +89,10 @@ class BlogPostRepository extends ServiceEntityRepository
     /**
      * Decrements comments_count field
      */
-    public function decrementCommentsCount(string $postId)
+    public function decrementCommentsCount(BlogPost $post)
     {
+        $postId = $post->getId();
+
         $conn = $this->getEntityManager()->getConnection();
 
         $sql = '

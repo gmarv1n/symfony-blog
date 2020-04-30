@@ -13,6 +13,7 @@ use App\Service\PostServices\AuthorshipChecker;
 use App\Service\LikeServices\BlogPostLiker;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Ramsey\Uuid\Uuid;
+use App\Entity\User;
 
 /**
  * @Route("/blog")
@@ -67,7 +68,7 @@ class BlogPostController extends AbstractController
         $likeToken = Uuid::uuid4();
         $session->set('likeToken', $likeToken);
 
-        $isAlreadyLiked = $liker->isLiked($postId);
+        $isAlreadyLiked = $liker->isLiked($blogPost);
 
         // $isAuthor variable recieve re result of AuthorShipChecker's method isAuthor() and
         // send it to a view as 'isAuthor' wich is uses in logic inside of view to show or not
@@ -131,8 +132,7 @@ class BlogPostController extends AbstractController
         $postLikeToken = $request->request->get('likeToken');
 
         if ( $sessionLikeToken === $postLikeToken ) {
-            $postId = $blogPost->getId();
-            $liker->like($postId);
+            $liker->like($blogPost);
         }
         $session->remove('likeToken');
         return $this->redirectToRoute('blog_post_show', ['slug' => $blogPost->getSlug()]);
@@ -149,8 +149,7 @@ class BlogPostController extends AbstractController
         $sessionLikeToken = $session->get('likeToken')->toString();
         $postLikeToken = $request->request->get('likeToken');
         if ( $sessionLikeToken === $postLikeToken ) {
-            $postId = $blogPost->getId();
-            $liker->unlike($postId);
+            $liker->unlike($blogPost);
         }
         $session->remove('likeToken');
         return $this->redirectToRoute('blog_post_show', ['slug' => $blogPost->getSlug()]);

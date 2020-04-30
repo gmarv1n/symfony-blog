@@ -13,6 +13,7 @@ namespace App\Service\LikeServices;
 
 use App\Entity\PostLike;
 use App\Entity\BlogPost;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 use Ramsey\Uuid\Uuid;
@@ -60,11 +61,11 @@ class BlogPostLiker
      * 
      * @return void
      */
-    public function like(Uuid $postId) : Void
+    public function like(BlogPost $post) : Void
     {
-        $userId = $this->security->getUser()->getId();
-        $this->postLikeRepository->writeLike($userId, $postId);
-        $this->blogPostRepository->incrementPostLikeCount($postId);
+        $user = $this->security->getUser();
+        $this->postLikeRepository->writeLike($user, $post);
+        $this->blogPostRepository->incrementPostLikeCount($post);
     }
 
     /**
@@ -78,11 +79,12 @@ class BlogPostLiker
      * 
      * @return void
      */
-    public function unlike(Uuid $postId) : Void
+    public function unlike(BlogPost $post) : Void
     {
-        $userId = $this->security->getUser()->getId();
-        $this->postLikeRepository->removeLike($userId, $postId);
-        $this->blogPostRepository->decrementPostLikeCount($postId);
+        $user = $this->security->getUser();
+
+        $this->postLikeRepository->removeLike($user, $post);
+        $this->blogPostRepository->decrementPostLikeCount($post);
     }
 
     /**
@@ -97,11 +99,11 @@ class BlogPostLiker
      * 
      * @return boolean
      */
-    public function isLiked(Uuid $postId) : Bool
+    public function isLiked(BlogPost $post) : Bool
     {
         if ($this->security->getUser()) {
-            $userId = $this->security->getUser()->getId();
-            return $this->postLikeRepository->isLikeExtist($userId, $postId);
+            $user = $this->security->getUser();
+            return $this->postLikeRepository->isLikeExtist($user, $post);
         } else {
             return false;
         }

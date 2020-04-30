@@ -14,6 +14,8 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use DateTime;
+use App\Entity\BlogPost;
+use App\Service\PostServices\PostFinder;
 
 /**
  * @Route("/comment")
@@ -34,26 +36,29 @@ class CommentController extends AbstractController
      * @Route("/by_post", name="comment_index_for_post", methods={"GET"})
      * This method might determ what is the id of post and return all of comments for it
      */
-    public function showPostsComments(string $postId, CommentRepository $commentRepository): Response
+    public function showPostsComments(BlogPost $post, CommentRepository $commentRepository): Response
     {
         return $this->render('comment/_comment_list_in_post.html.twig', [
-            'comments' => $commentRepository->findCommentsByPostId($postId),
-            'postId'   => $postId,
+            'comments' => $commentRepository->findCommentsByPost($post),
+            'post'   => $post,
         ]);
     }
 
     /**
      * @Route("/new/{postId}", name="comment_new", methods={"GET","POST"})
      */
-    public function new(string $postId,
-                        Request $request,
-                        CommentsCountManager $commentsCountManager): Response
+    public function new(Request $request,
+                        CommentsCountManager $commentsCountManager,
+                        PostFinder $postFinder,
+                        string $postId
+                        ): Response
     {
         /** @var \App\Entity\Comment $comment */
         $comment = new Comment();
 
-        $postSlug = $request->request->get('postSlug');
-
+        $post = $postFinder->getPostById($postId);
+        
+        $postSlug = $post->getSlug();
         // $form = $this->createForm(CommentType::class, $comment);
 
         $todayDate = new DateTime("NOW");
@@ -81,7 +86,7 @@ class CommentController extends AbstractController
             $entityManager->persist($comment);
             $entityManager->flush();
 
-            $commentsCountManager->increment($postId);
+            $commentsCountManager->increment($post);
 
             return $this->redirectToRoute('blog_post_show', ['slug' => $postSlug]);
         }

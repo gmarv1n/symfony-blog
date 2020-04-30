@@ -34,9 +34,9 @@ class CommentsCountManager
      * 
      * @return void
      */
-    public function increment(string $postId) : Void
+    public function increment(BlogPost $post) : Void
     {
-        $this->blogPostRepository->incrementCommentsCount($postId);
+        $this->blogPostRepository->incrementCommentsCount($post);
     }
 
     /**
@@ -44,8 +44,8 @@ class CommentsCountManager
      * 
      * @return void
      */
-    public function decrement(string $postId) : Void
+    public function decrement(BlogPost $post) : Void
     {
-        $this->blogPostRepository->decrementCommentsCount($postId);
+        $this->blogPostRepository->decrementCommentsCount($post);
     }
 }
