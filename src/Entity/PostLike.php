@@ -3,10 +3,13 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\UniqueConstraint;
+use Doctrine\ORM\Mapping\Table;
 use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PostLikeRepository")
+ * @Table(name="post_like",uniqueConstraints={@UniqueConstraint(name="postlike_pair", columns={"user_id", "post_id"})})
  */
 class PostLike
 {
@@ -47,7 +50,7 @@ class PostLike
 
     public function getPostId()//: ?string
     {
-        return $this->post_slug;
+        return $this->post_id;
     }
 
     public function setPostId(Uuid $post_id): self
