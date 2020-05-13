@@ -1,9 +1,9 @@
 <?php
 /**
  * AuthorshipChecker Service
- * 
+ *
  * This class check if post is written by current logged in author
- * 
+ *
  * @author Gregory Yatsukhno <gyatsukhno@gmail.com>
  * @version 1.0
  */
@@ -23,30 +23,29 @@ class AuthorshipChecker
     /**
      * Constructor for private variable $security
      */
-    public function __construct(Security $security) 
+    public function __construct(Security $security)
     {
         $this->security = $security;
     }
     /**
      * isAuthor
-     * 
+     *
      * This method checks is post written by logged in author
-     * 
+     *
      * @param BlogPost $blogPost
-     * 
+     *
      * @return Boolean
      */
     public function isAuthor(BlogPost $blogPost) : bool
     {
-        if ( $this->security->getUser() ) {
+        if ($this->security->getUser()) {
             $userId = $this->security->getUser()->getId();
             $postAuthor = $blogPost->getAuthorId()->toString();
 
-            if ( $userId === $postAuthor ) {
+            if ($userId === $postAuthor) {
                 return true;
             }
         }
         return false;
     }
-
 }

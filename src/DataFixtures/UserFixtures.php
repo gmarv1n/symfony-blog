@@ -27,7 +27,7 @@ class UserFixtures extends Fixture
 
         $date = new DateTime('2020-06-03');
 
-        // Putting some users 
+        // Putting some users
         // User 1
         $user1 = new User();
         $user1->setUserNickName("Gregory");

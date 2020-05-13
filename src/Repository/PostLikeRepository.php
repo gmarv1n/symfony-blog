@@ -23,7 +23,7 @@ class PostLikeRepository extends ServiceEntityRepository
     }
 
     /**
-      * @return PostLike[] 
+      * @return PostLike[]
       */
     
     public function getLikeConnection($postId, $userId)
@@ -42,8 +42,8 @@ class PostLikeRepository extends ServiceEntityRepository
       * @return true if like connection with argument fields extists
       */
     
-      public function isLikeExtist(User $user, BlogPost $post) : Bool
-      {
+    public function isLikeExtist(User $user, BlogPost $post) : Bool
+    {
         $userId = $user->getId();
 
         $postId = $post->getId();
@@ -55,13 +55,12 @@ class PostLikeRepository extends ServiceEntityRepository
                                ->setParameter('userId', $userId)
                                ->getQuery()
                                ->getOneOrNullResult();
-        if ( $likeConnection != null ) {
+        if ($likeConnection != null) {
             return true;
         } else {
             return false;
         }
-          
-      }
+    }
 
     public function writeLike(User $user, BlogPost $post) :Void
     {

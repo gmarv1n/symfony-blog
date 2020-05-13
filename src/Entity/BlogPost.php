@@ -22,9 +22,9 @@ class BlogPost
 
     /**
      * NOTE: This is not a mapped field of entity metadata, just a simple property.
-     * 
+     *
      * @Vich\UploadableField(mapping="blog_post_images", fileNameProperty="image_name", size="imageSize")
-     * 
+     *
      * @var File|null
      */
     private $imageFile;

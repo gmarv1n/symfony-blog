@@ -9,7 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class UserType extends AbstractType
-{   
+{
     private const ROLE_ADMIN = 'ROLE_ADMIN';
     private const ROLE_AUTHOR = 'ROLE_AUTHOR';
     private const ROLE_USER = 'ROLE_USER';
@@ -21,9 +21,7 @@ class UserType extends AbstractType
             ->add('userNickName')
             ->add('roles', ChoiceType::class, [
                 'multiple' => true,
-                'choices'  => $rolesChoices = $this->getRolesArray()            
-                ],
-            )
+                'choices'  => $rolesChoices = $this->getRolesArray()])
             ->add('password')
         ;
     }
@@ -37,7 +35,7 @@ class UserType extends AbstractType
     
     public function getRolesArray() : array
     {
-        $choices = ["User" => UserType::ROLE_USER, 
+        $choices = ["User" => UserType::ROLE_USER,
                     "Author" => UserType::ROLE_AUTHOR,
                     "Administrator" => UserType::ROLE_ADMIN
                 ];

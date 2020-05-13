@@ -47,12 +47,12 @@ class CommentController extends AbstractController
     /**
      * @Route("/new/{postId}", name="comment_new", methods={"GET","POST"})
      */
-    public function new(Request $request,
-                        CommentsCountManager $commentsCountManager,
-                        PostFinder $postFinder,
-                        string $postId
-                        ): Response
-    {
+    public function new(
+        Request $request,
+        CommentsCountManager $commentsCountManager,
+        PostFinder $postFinder,
+        string $postId
+    ): Response {
         /** @var \App\Entity\Comment $comment */
         $comment = new Comment();
 

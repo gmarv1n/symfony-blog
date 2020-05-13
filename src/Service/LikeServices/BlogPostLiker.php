@@ -1,10 +1,10 @@
 <?php
 /**
  * BlogPostLiker Service
- * 
+ *
  * This class manage the creating a LikeConnection in database for the selected post.
  * It uses in LikeUrlGenerator and LikeConnection controller.
- * 
+ *
  * @author Gregory Yatsukhno <gyatsukhno@gmail.com>
  * @version 1.01
  */
@@ -21,11 +21,11 @@ use Ramsey\Uuid\Uuid;
 class BlogPostLiker
 {
     /**
-     * @var PostLikeRepository 
+     * @var PostLikeRepository
      */
     private $postLikeRepository;
     /**
-     * @var BlogPostRepository 
+     * @var BlogPostRepository
      */
     private $BlogPostRepository;
 
@@ -42,9 +42,10 @@ class BlogPostLiker
     /**
      * Constructor for initializing private variables.
      */
-    public function __construct(EntityManagerInterface $entityManager, 
-                                Security $security)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        Security $security
+    ) {
         $this->postLikeRepository = $entityManager->getRepository(PostLike::class);
         $this->blogPostRepository = $entityManager->getRepository(BlogPost::class);
         $this->security = $security;
@@ -52,13 +53,10 @@ class BlogPostLiker
 
     /**
      * like
-     * 
+     *
      * This function getting a user name inside and recieve post slug as a parameter,
      * then call writeLikeConnection() in LikeConnectionRepository and increments
      * the likes_count with PostLikeCounterManager's incrementLikeCoune()
-     * 
-     *
-     * 
      * @return void
      */
     public function like(BlogPost $post) : Void
@@ -70,13 +68,10 @@ class BlogPostLiker
 
     /**
      * unlike
-     * 
+     *
      * This function getting a user name inside and recieve post slug as a parameter,
      * then call removeLikeConnection() in LikeConnectionRepository and decrements
      * the likes_count with PostLikeCounterManager's decrementLikeCoune()
-     * 
-     * 
-     * 
      * @return void
      */
     public function unlike(BlogPost $post) : Void
@@ -89,14 +84,11 @@ class BlogPostLiker
 
     /**
      * isLiked
-     * 
+     *
      * This function recieves user name and post slug to call
-     * isLikeConnectionExtists() in LikeConnectionRepository, that checks 
+     * isLikeConnectionExtists() in LikeConnectionRepository, that checks
      * if the like note in table like_connection already exists with this
      * parameters and return true or false
-     * 
-     * 
-     * 
      * @return boolean
      */
     public function isLiked(BlogPost $post) : Bool

@@ -20,10 +20,11 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
     private $userRepository;
     private $blogPostRepository;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder,
-                                UserRepository $userRepository,
-                                BlogPostRepository $blogPostRepository)
-    {
+    public function __construct(
+        UserPasswordEncoderInterface $passwordEncoder,
+        UserRepository $userRepository,
+        BlogPostRepository $blogPostRepository
+    ) {
         $this->passwordEncoder = $passwordEncoder;
         $this->userRepository = $userRepository;
         $this->blogPostRepository = $blogPostRepository;

@@ -1,9 +1,9 @@
 <?php
 /**
  * PostFinder Service
- * 
+ *
  * This class find the post by post_id, and return it
- * 
+ *
  * @author Gregory Yatsukhno <gyatsukhno@gmail.com>
  * @version 1.0
  */
@@ -30,9 +30,9 @@ class PostFinder
 
     /**
      * getPostById
-     * 
+     *
      * @param string $postId
-     * 
+     *
      * @return BlogPost $blogPost
      */
     public function getPostById(string $postId) : BlogPost
@@ -40,5 +40,4 @@ class PostFinder
         $blogPost = $this->repository->getPostById($postId);
         return $blogPost;
     }
-
 }

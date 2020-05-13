@@ -1,8 +1,7 @@
 <?php
 /**
  * CommentsCountManager Service
- * 
- * 
+ *
  * @author Gregory Yatsukhno <gyatsukhno@gmail.com>
  * @version 28.04.2020
  */
@@ -17,7 +16,7 @@ use Ramsey\Uuid\Uuid;
 class CommentsCountManager
 {
     /**
-     * @var BlogPostRepository 
+     * @var BlogPostRepository
      */
     private $BlogPostRepository;
 
@@ -31,7 +30,7 @@ class CommentsCountManager
 
     /**
      * Increment
-     * 
+     *
      * @return void
      */
     public function increment(BlogPost $post) : Void
@@ -41,7 +40,7 @@ class CommentsCountManager
 
     /**
      * Decrement
-     * 
+     *
      * @return void
      */
     public function decrement(BlogPost $post) : Void

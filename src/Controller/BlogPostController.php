@@ -56,12 +56,12 @@ class BlogPostController extends AbstractController
     /**
      * @Route("/{slug}", name="blog_post_show", methods={"GET"})
      */
-    public function show(BlogPost $blogPost, 
-                         BlogPostLiker $liker, 
-                         AuthorshipChecker $authorshipChecker,
-                         SessionInterface $session ): Response
-    {
-        
+    public function show(
+        BlogPost $blogPost,
+        BlogPostLiker $liker,
+        AuthorshipChecker $authorshipChecker,
+        SessionInterface $session
+    ): Response {
         $postSlug = $blogPost->getSlug();
         $postId = $blogPost->getId();
 
@@ -72,13 +72,13 @@ class BlogPostController extends AbstractController
 
         // $isAuthor variable recieve re result of AuthorShipChecker's method isAuthor() and
         // send it to a view as 'isAuthor' wich is uses in logic inside of view to show or not
-        // to show the delete button and edit button, so just the author of post (and admin) 
+        // to show the delete button and edit button, so just the author of post (and admin)
         // can delete the post
 
         $isAuthor = $authorshipChecker->isAuthor($blogPost);
 
         return $this->render('blog_post/show.html.twig', [
-            'blog_post'     => $blogPost, 
+            'blog_post'     => $blogPost,
             'isLiked'       => $isAlreadyLiked,
             'stringPostId'  => $postId->toString(),
             'isAuthor'      => $isAuthor,
@@ -123,36 +123,37 @@ class BlogPostController extends AbstractController
     /**
      * @Route("/{slug}/like", name="blog_post_like", methods={"POST"})
      */
-    public function like(BlogPost $blogPost, 
-                         BlogPostLiker $liker, 
-                         SessionInterface $session,
-                         Request $request): Response
-    {   
+    public function like(
+        BlogPost $blogPost,
+        BlogPostLiker $liker,
+        SessionInterface $session,
+        Request $request
+    ): Response {
         $sessionLikeToken = $session->get('likeToken')->toString();
         $postLikeToken = $request->request->get('likeToken');
 
-        if ( $sessionLikeToken === $postLikeToken ) {
+        if ($sessionLikeToken === $postLikeToken) {
             $liker->like($blogPost);
         }
         $session->remove('likeToken');
         return $this->redirectToRoute('blog_post_show', ['slug' => $blogPost->getSlug()]);
     }
 
-    /** 
+    /**
      * @Route("/{slug}/unlike", name="blog_post_unlike", methods={"POST"})
      */
-    public function unlike(BlogPost $blogPost, 
-                           BlogPostLiker $liker, 
-                           SessionInterface $session,
-                           Request $request): Response
-    {
+    public function unlike(
+        BlogPost $blogPost,
+        BlogPostLiker $liker,
+        SessionInterface $session,
+        Request $request
+    ): Response {
         $sessionLikeToken = $session->get('likeToken')->toString();
         $postLikeToken = $request->request->get('likeToken');
-        if ( $sessionLikeToken === $postLikeToken ) {
+        if ($sessionLikeToken === $postLikeToken) {
             $liker->unlike($blogPost);
         }
         $session->remove('likeToken');
         return $this->redirectToRoute('blog_post_show', ['slug' => $blogPost->getSlug()]);
     }
-
 }
