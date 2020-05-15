@@ -1,0 +1,65 @@
+{# extends 'base.html.twig' #}
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Admin Page!!!{% endblock %}</title>
+    {% block stylesheets %}
+    <style>
+        .example-wrapper { margin: 1em; font: 12px/1.5 sans-serif; }
+        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+        .admin-sidebar { min-width: 20%; float: left;}
+        .admin-content-block { 
+            min-width: 70%; 
+            float: left; 
+            background-color: #f9f9f9; 
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid lightgrey;
+            min-height: 50%;
+        }
+        .admin-posts {
+            font-size: 13px;
+            border-collapse: collapse;
+            border: 1px solid lightgrey;
+        }
+        .admin-posts td {
+            border: 1px solid lightgrey;
+            padding: 5px;
+        }
+        .admin-posts tr {
+            background-color:white;
+        }
+
+    </style>
+    {% endblock %}
+</head>
+
+{% block header %}
+    {% if is_granted('ROLE_ADMIN') %}
+        {{ include('admin/_header_panel.html.twig') }}
+    {% endif %}
+{% endblock %}
+<br>
+<br>
+{# {% block title %}Hello AdminController!{% endblock %} #}
+
+{% block sidebar %}
+<div class="example-wrapper admin-sidebar">
+    <h1>You are admin!</h1>
+
+    So as you are an admin you can edit:
+    <ul>
+        <li><a href="{{ path('admin_posts') }}">Posts</a></li>
+        <li><a href="{{ path('admin_comments') }}">Comments</a></li>
+        <li><a href="{{ path('admin_users') }}">Users</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block body %}
+<div class="example-wrapper admin-content-block">
+    <h1>Hello Administrator! ✅</h1>
+
+    So as you are an admin 
+    
+</div>
+{% endblock %}

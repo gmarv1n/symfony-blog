@@ -13,6 +13,7 @@ use App\Service\PostServices\AuthorshipChecker;
 use App\Service\LikeServices\BlogPostLiker;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Ramsey\Uuid\Uuid;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Entity\User;
 
 /**
@@ -26,6 +27,17 @@ class BlogPostController extends AbstractController
     public function index(BlogPostRepository $blogPostRepository): Response
     {
         return $this->render('blog_post/index.html.twig', [
+            'blog_posts' => $blogPostRepository->findAll(),
+        ]);
+    }
+
+    /**
+     * @Route("/", name="blog_post_admin_index", methods={"GET"})
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function adminIndex(BlogPostRepository $blogPostRepository): Response
+    {
+        return $this->render('blog_post/admin/index.html.twig', [
             'blog_posts' => $blogPostRepository->findAll(),
         ]);
     }

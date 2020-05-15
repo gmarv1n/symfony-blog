@@ -4,7 +4,9 @@
     .menu-item { font-size: 15px; display: inline-block; margin-right: 16px; }
     .right-align { text-align: right;}
 </style>
-
+{% if is_granted('ROLE_ADMIN') %}
+    {{ include('admin/_header_panel.html.twig') }}
+{% endif %}
 <div class="example-wrapper">
     <h3>This is {{ controller_header }}! ✅</h3>
 
