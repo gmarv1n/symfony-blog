@@ -1,0 +1,77 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block title %}BlogPost {{ blog_post.title }}{% endblock %}
+
+{% block body %}
+<div class="admin-content-block">
+    <h1>BlogPost {{ blog_post.title }}</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>ID</th>
+                <td>{{ blog_post.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ blog_post.title }}</td>
+            </tr>
+            <tr>
+                <th>Slug</th>
+                <td>{{ blog_post.slug }}</td>
+            </tr>
+            <tr>
+                <th>Image_name</th>
+                <td>{{ blog_post.imageName }}</td>
+                <td><img src="{{ vich_uploader_asset(blog_post, "imageFile") }}" alt="{{ blog_post.title }}" /></td>
+            </tr>
+            <tr>
+                <th>Content</th>
+                <td>{{ blog_post.content }}</td>
+            </tr>
+            <tr>
+                <th>Category</th>
+                <td>{{ blog_post.category }}</td>
+            </tr>
+            <tr>
+                <th>Tags</th>
+                <td>{{ blog_post.tags }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ blog_post.date ? blog_post.date|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Author_name</th>
+                <td>{{ blog_post.authorNick }}</td>
+            </tr>
+            <tr>
+                <th>Author_Id</th>
+                <td>{{ blog_post.authorId }}</td>
+            </tr>
+            <tr>
+                <th>Likes_count</th>
+                <td>{{ blog_post.likesCount }}</td>
+            </tr>
+            <tr>
+                <th>Comments_count</th>
+                <td>{{ blog_post.commentsCount }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('admin_posts') }}">back to list</a>
+
+        <a href="{{ path('blog_post_admin_edit', {'slug': blog_post.slug}) }}">edit</a>
+
+    <br>
+
+        {{ include('blog_post/_delete_form.html.twig') }}
+
+    {# Summoning the comments list #}
+
+    {{ render(controller(
+            'App\\Controller\\CommentController::showPostsComments', {post: blog_post}
+        )) }} 
+</div>
+{% endblock %}

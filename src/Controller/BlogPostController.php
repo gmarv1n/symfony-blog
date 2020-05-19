@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\BlogPost;
 use App\Form\BlogPostType;
+use App\Form\Admin\AdminBlogPostType;
 use App\Repository\BlogPostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -66,6 +67,30 @@ class BlogPostController extends AbstractController
     }
 
     /**
+     * @Route("/new-by-admin", name="blog_post_admin_new", methods={"GET","POST"})
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function adminNew(Request $request): Response
+    {
+        $blogPost = new BlogPost();
+        $form = $this->createForm(AdminBlogPostType::class, $blogPost);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($blogPost);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('admin_posts');
+        }
+
+        return $this->render('blog_post/admin/new.html.twig', [
+            'blog_post' => $blogPost,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
      * @Route("/{slug}", name="blog_post_show", methods={"GET"})
      */
     public function show(
@@ -99,6 +124,17 @@ class BlogPostController extends AbstractController
     }
 
     /**
+     * @Route("/{slug}/admin-show", name="blog_post_admin_show", methods={"GET"})
+     * IsGranted("ROLE_ADMIN")
+     */
+    public function adminShow(BlogPost $blogPost): Response
+    {
+        return $this->render('blog_post/admin/show.html.twig', [
+            'blog_post' => $blogPost,
+        ]);
+    }
+
+    /**
      * @Route("/{slug}/edit", name="blog_post_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, BlogPost $blogPost): Response
@@ -113,6 +149,27 @@ class BlogPostController extends AbstractController
         }
 
         return $this->render('blog_post/edit.html.twig', [
+            'blog_post' => $blogPost,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{slug}/edit-admin", name="blog_post_admin_edit", methods={"GET","POST"})
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function adminEdit(Request $request, BlogPost $blogPost): Response
+    {
+        $form = $this->createForm(AdminBlogPostType::class, $blogPost);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('admin_posts');
+        }
+
+        return $this->render('blog_post/admin/edit.html.twig', [
             'blog_post' => $blogPost,
             'form' => $form->createView(),
         ]);

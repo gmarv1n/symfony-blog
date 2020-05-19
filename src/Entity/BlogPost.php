@@ -87,14 +87,20 @@ class BlogPost
     private $author_id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true, options={"unsigned":true, "default":0})
      */
     private $likes_count;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true, options={"unsigned":true, "default":0})
      */
     private $comments_count;
+
+    public function __construct()
+    {
+        $this->likes_count = 0;
+        $this->comments_count = 0;
+    }
 
     public function getId()
     {

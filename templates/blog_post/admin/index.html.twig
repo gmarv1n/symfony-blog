@@ -24,7 +24,7 @@
         {% for blog_post in blog_posts %}
             <tr>
                 {# <td>{{ blog_post.id }}</td> #}
-                <td><a href="{{ path('blog_post_show', {'slug': blog_post.slug}) }}">{{ blog_post.title }}</a></td>
+                <td><a href="{{ path('blog_post_admin_show', {'slug': blog_post.slug}) }}">{{ blog_post.title }}</a></td>
                 {# <td>{{ blog_post.slug }}</td> #}
                 {# <td>{{ blog_post.imageName }}</td> #}
                 <td>{{ blog_post.shortContent }}</td>
@@ -37,7 +37,7 @@
                 <td>{{ blog_post.likesCount }}</td>
                 <td>{{ blog_post.commentsCount }}</td>
                 <td>
-                    <a href="{{ path('blog_post_edit', {'slug': blog_post.slug}) }}">edit</a>
+                    <a href="{{ path('blog_post_admin_edit', {'slug': blog_post.slug}) }}">edit</a>
                     {{ include('blog_post/_delete_form.html.twig') }}
                 </td>
             </tr>
@@ -49,5 +49,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('blog_post_new') }}">Create new</a>
+    <a href="{{ path('blog_post_admin_new') }}">Create new</a>
 {% endblock %}
