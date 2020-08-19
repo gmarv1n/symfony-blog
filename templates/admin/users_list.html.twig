@@ -1,0 +1,15 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block title %}Users Admin index{% endblock %}
+
+{% block body %}
+<div class="example-wrapper admin-content-block">
+    <h1>Hello {{ controller_name }}! ✅</h1>
+
+    So there is the list of all of the users:
+    {{ render(controller(
+            'App\\Controller\\UserController::adminIndex'
+        )) }} 
+    
+</div>
+{% endblock %}

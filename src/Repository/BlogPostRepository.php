@@ -22,11 +22,11 @@ class BlogPostRepository extends ServiceEntityRepository
     /**
      * @return BlogPost[] Returns a BlogPost object
      */
-    public function findByPostSlugField($slug)
+    public function getPostById(string $id) : BlogPost
     {
         return $this->createQueryBuilder('b')
-            ->andWhere('b.slug = :slug')
-            ->setParameter('slug', $slug)
+            ->andWhere('b.id = UUID_TO_BIN(:id)')
+            ->setParameter('id', $id)
             ->getQuery()
             ->getOneOrNullResult()
         ;
@@ -35,8 +35,10 @@ class BlogPostRepository extends ServiceEntityRepository
     /**
      * Increments likes_count field
      */
-    public function incrementPostLikeCount(string $postId)
+    public function incrementPostLikeCount(BlogPost $post)
     {
+        $postId = $post->getId();
+        
         $conn = $this->getEntityManager()->getConnection();
 
         $sql = '
@@ -51,13 +53,51 @@ class BlogPostRepository extends ServiceEntityRepository
     /**
      * Decrements likes_count field
      */
-    public function decrementPostLikeCount(string $postId)
+    public function decrementPostLikeCount(BlogPost $post)
     {
+        $postId = $post->getId();
+
         $conn = $this->getEntityManager()->getConnection();
 
         $sql = '
             UPDATE blog_post
             SET likes_count = likes_count - 1 
+            WHERE id = UUID_TO_BIN(:postId)
+            ';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(['postId' => $postId]);
+    }
+
+    /**
+     * Increments comments_count field
+     */
+    public function incrementCommentsCount(BlogPost $post)
+    {
+        $postId = $post->getId();
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+            UPDATE blog_post
+            SET comments_count = comments_count + 1 
+            WHERE id = UUID_TO_BIN(:postId)
+            ';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(['postId' => $postId]);
+    }
+
+    /**
+     * Decrements comments_count field
+     */
+    public function decrementCommentsCount(BlogPost $post)
+    {
+        $postId = $post->getId();
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+            UPDATE blog_post
+            SET comments_count = comments_count - 1 
             WHERE id = UUID_TO_BIN(:postId)
             ';
         $stmt = $conn->prepare($sql);

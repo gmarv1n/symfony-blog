@@ -1,24 +1,15 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/index.html.twig' %}
 
-{% block title %}BlogPost{% endblock %}
+{% block title %}BlogPost {{ blog_post.title }}{% endblock %}
 
 {% block body %}
-
-    <style>
-        .unlike-link-unactive {
-            color: grey;
-        }
-        .unlike-link-unactive:hover {
-            color: lightgrey;
-        }
-    </style>
-
-    <h1>BlogPost</h1>
+<div class="admin-content-block">
+    <h1>BlogPost {{ blog_post.title }}</h1>
 
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
+                <th>ID</th>
                 <td>{{ blog_post.id }}</td>
             </tr>
             <tr>
@@ -32,10 +23,7 @@
             <tr>
                 <th>Image_name</th>
                 <td>{{ blog_post.imageName }}</td>
-            </tr>
-            <tr>
-                <th>Short_content</th>
-                <td>{{ blog_post.shortContent }}</td>
+                <td><img src="{{ vich_uploader_asset(blog_post, "imageFile") }}" alt="{{ blog_post.title }}" /></td>
             </tr>
             <tr>
                 <th>Content</th>
@@ -55,10 +43,14 @@
             </tr>
             <tr>
                 <th>Author_name</th>
-                <td>{{ blog_post.authorName }}</td>
+                <td>{{ blog_post.authorNick }}</td>
             </tr>
             <tr>
-                <th>Likes_counter</th>
+                <th>Author_Id</th>
+                <td>{{ blog_post.authorId }}</td>
+            </tr>
+            <tr>
+                <th>Likes_count</th>
                 <td>{{ blog_post.likesCount }}</td>
             </tr>
             <tr>
@@ -68,20 +60,18 @@
         </tbody>
     </table>
 
-    <a href="{{ path('blog_post_index') }}">back to list</a>
+    <a href="{{ path('admin_posts') }}">back to list</a>
 
-    <a href="{{ path('blog_post_edit', {'id': blog_post.id}) }}">edit</a>
-    <br><br>
-    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-    <a href="{{ like_post_url }}"><strong>{{ likeUrlText }}</strong></a>
-    {% else %}
-    <span class="unlike-link-unactive" title="Only registered users can like a post"><strong>Like</strong></span>
-    {% endif %}
-    <br><br>
-    {{ include('blog_post/_delete_form.html.twig') }}
+        <a href="{{ path('blog_post_admin_edit', {'slug': blog_post.slug}) }}">edit</a>
+
+    <br>
+
+        {{ include('blog_post/_delete_form.html.twig') }}
 
     {# Summoning the comments list #}
+
     {{ render(controller(
-            'App\\Controller\\CommentController::getCommentsListByPost', {postSlug: blog_post.slug}
-        )) }}
+            'App\\Controller\\CommentController::showPostsComments', {post: blog_post}
+        )) }} 
+</div>
 {% endblock %}

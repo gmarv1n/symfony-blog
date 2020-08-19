@@ -22,9 +22,9 @@ class BlogPost
 
     /**
      * NOTE: This is not a mapped field of entity metadata, just a simple property.
-     * 
+     *
      * @Vich\UploadableField(mapping="blog_post_images", fileNameProperty="image_name", size="imageSize")
-     * 
+     *
      * @var File|null
      */
     private $imageFile;
@@ -87,14 +87,20 @@ class BlogPost
     private $author_id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true, options={"unsigned":true, "default":0})
      */
     private $likes_count;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true, options={"unsigned":true, "default":0})
      */
     private $comments_count;
+
+    public function __construct()
+    {
+        $this->likes_count = 0;
+        $this->comments_count = 0;
+    }
 
     public function getId()
     {

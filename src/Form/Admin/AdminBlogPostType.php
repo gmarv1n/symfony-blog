@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Admin;
 
 use App\Entity\BlogPost;
 use Symfony\Component\Form\AbstractType;
@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\Security;
 use DateTime;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
-class BlogPostType extends AbstractType
+class AdminBlogPostType extends AbstractType
 {
     /**
      * @var User
@@ -54,11 +54,11 @@ class BlogPostType extends AbstractType
             ->add('author_nick', TextType::class, [
                 'data' => $authorNick,
             ])
-            ->add('author_id', HiddenType::class, [
+            ->add('author_id', TextType::class, [
                 'data' => $authorId,
             ])
-            // ->add('likes_count') //, HiddenType::class
-            // ->add('comments_count') //, HiddenType::class
+            ->add('likes_count') //, HiddenType::class
+            ->add('comments_count') //, HiddenType::class
         ;
     }
 

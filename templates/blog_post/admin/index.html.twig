@@ -1,0 +1,53 @@
+{# {% extends 'admin/index.html.twig' %} #}
+
+{% block body %}
+    <table class="table admin-posts">
+        <thead>
+            <tr>
+                {# <th>Id</th> #}
+                <th>Title</th>
+                {# <th>Slug</th> #}
+                {# <th>Image_name</th> #}
+                <th>Short_content</th>
+                {# <th>Content</th> #}
+                <th>Category</th>
+                <th>Tags</th>
+                <th>Date</th>
+                <th>Author_nick</th>
+                {# <th>Author_id</th> #}
+                <th>Likes_count</th>
+                <th>Comments_count</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for blog_post in blog_posts %}
+            <tr>
+                {# <td>{{ blog_post.id }}</td> #}
+                <td><a href="{{ path('blog_post_admin_show', {'slug': blog_post.slug}) }}">{{ blog_post.title }}</a></td>
+                {# <td>{{ blog_post.slug }}</td> #}
+                {# <td>{{ blog_post.imageName }}</td> #}
+                <td>{{ blog_post.shortContent }}</td>
+                {# <td>{{ blog_post.content }}</td> #}
+                <td>{{ blog_post.category }}</td>
+                <td>{{ blog_post.tags }}</td>
+                <td>{{ blog_post.date ? blog_post.date|date('Y-m-d') : '' }}</td> {# <td>{{ blog_post.date ? blog_post.date|date('Y-m-d H:i:s') : '' }}</td> #}
+                <td>{{ blog_post.authorNick }}</td>
+                {# <td>{{ blog_post.authorId }}</td> #}
+                <td>{{ blog_post.likesCount }}</td>
+                <td>{{ blog_post.commentsCount }}</td>
+                <td>
+                    <a href="{{ path('blog_post_admin_edit', {'slug': blog_post.slug}) }}">edit</a>
+                    {{ include('blog_post/_delete_form.html.twig') }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="13">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('blog_post_admin_new') }}">Create new</a>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block title %}BlogPosts Admin index{% endblock %}
+
+{% block body %}
+<div class="example-wrapper admin-content-block">
+    <h1>Hello {{ controller_name }}! ✅</h1>
+
+    So there is the list of all of the posts:
+    {{ render(controller(
+            'App\\Controller\\BlogPostController::adminIndex'
+        )) }} 
+</div>
+{% endblock %}

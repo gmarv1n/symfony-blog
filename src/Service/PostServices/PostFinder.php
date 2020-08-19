@@ -1,9 +1,9 @@
 <?php
 /**
  * PostFinder Service
- * 
- * This class find the post id by post_slug, in LikeConnectionController
- * 
+ *
+ * This class find the post by post_id, and return it
+ *
  * @author Gregory Yatsukhno <gyatsukhno@gmail.com>
  * @version 1.0
  */
@@ -29,20 +29,15 @@ class PostFinder
     }
 
     /**
-     * getIdBySlug
-     * 
-     * This method recieve string postSlug, get the BlogPost object by using
-     * blogPostRepository's findByPostSlugField(), get its ID and returns it
-     * 
-     * @param string $postSlug
-     * 
-     * @return string $blogPostId
+     * getPostById
+     *
+     * @param string $postId
+     *
+     * @return BlogPost $blogPost
      */
-    public function getIdBySlug(string $postSlug) : string
+    public function getPostById(string $postId) : BlogPost
     {
-        $blogPost = $this->repository->findByPostSlugField($postSlug);
-        $blogPostId = $blogPost->getId();
-        return $blogPostId;
+        $blogPost = $this->repository->getPostById($postId);
+        return $blogPost;
     }
-
 }

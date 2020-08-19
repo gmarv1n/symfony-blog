@@ -59,7 +59,7 @@
                 <td>{{ blog_post.authorId }}</td>
             </tr>
             <tr>
-                <th>Likes_counter</th>
+                <th>Likes_count</th>
                 <td>{{ blog_post.likesCount }}</td>
             </tr>
             <tr>
@@ -73,13 +73,28 @@
     {% if isAuthor == true %}
         <a href="{{ path('blog_post_edit', {'slug': blog_post.slug}) }}">edit</a>
     {% endif %}  
-    <br><br>  
+    {# <br><br>  
     {% if is_granted('IS_AUTHENTICATED_FULLY') and isLiked == false %}
         <a href="{{ path('blog_post_like', {slug: blog_post.slug}) }}"><strong>Like!</strong></a>
     {% elseif is_granted('IS_AUTHENTICATED_FULLY') and isLiked == true %}
         <a href="{{ path('blog_post_unlike', {slug: blog_post.slug}) }}"><strong>Unlike!</strong></a>
     {% else %}
         <span class="unlike-link-unactive" title="Only registered users can like a post"><strong>Like</strong></span>
+    {% endif %} #}
+    <br><br>
+    {% if is_granted('IS_AUTHENTICATED_FULLY') and isLiked == false %}
+    <form action="{{ path('blog_post_like', {slug: blog_post.slug}) }}" method="post" onsubmit="document.getElementById('like-btn').disabled = true;">
+        <input type="hidden" name="likeToken" value="{{ likeToken }}" />
+        <input type="submit" id="like-btn" value="Like!" />
+    </form>
+    {% elseif is_granted('IS_AUTHENTICATED_FULLY') and isLiked == true %}
+    <form action="{{ path('blog_post_unlike', {slug: blog_post.slug}) }}" method="post" onsubmit="document.getElementById('unlike-btn').disabled = true;">
+        <input type="hidden" name="likeToken" value="{{ likeToken }}" />
+        <input type="submit" id="unlike-btn" value="Unlike!" />
+    </form>
+    {% else %}
+        <input disabled="disabled" type="submit" title="Only registered users can like a post" value="Like!" />
+        {# <span class="unlike-link-unactive" title="Only registered users can like a post"><strong>Like</strong></span> #}
     {% endif %}
     <br><br>
     {% if isAuthor == true %}
@@ -88,7 +103,7 @@
     {# Summoning the comments list #}
 
     {{ render(controller(
-            'App\\Controller\\CommentController::getCommentsListByPostId', {postId: stringPostId}
+            'App\\Controller\\CommentController::showPostsComments', {post: blog_post}
         )) }} 
 
 {% endblock %}

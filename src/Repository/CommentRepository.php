@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Comment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use App\Entity\BlogPost;
 
 /**
  * @method Comment|null find($id, $lockMode = null, $lockVersion = null)
@@ -24,8 +25,10 @@ class CommentRepository extends ServiceEntityRepository
       * This method returns array of comments for blogpost. Maybe...
       */
     
-    public function findCommentsByPostId($postId)
+    public function findCommentsByPost($post)
     {
+        $postId = $post->getId();
+
         return $this->createQueryBuilder('c')
             ->andWhere('c.post_id = UUID_TO_BIN(:postId)')
             ->setParameter('postId', $postId)

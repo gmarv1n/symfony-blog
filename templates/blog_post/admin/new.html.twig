@@ -1,0 +1,13 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block title %}New BlogPost{% endblock %}
+
+{% block body %}
+<div class="admin-content-block">
+    <h1>Create new BlogPost</h1>
+
+    {{ include('blog_post/_form.html.twig') }}
+
+    <a href="{{ path('admin_posts') }}">back to list</a>
+</div>
+{% endblock %}

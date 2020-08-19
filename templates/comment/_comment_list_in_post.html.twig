@@ -36,6 +36,7 @@
         </tbody>
     </table>
 
-    <a href="{{ path('comment_new') }}">Create new</a>
+    <a href="{{ path('comment_new', {postId: post.id}) }}">Create new</a>
+
     <hr>
 </div>

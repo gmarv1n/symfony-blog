@@ -28,7 +28,9 @@ class UuidToBinFunction extends FunctionNode
  
     public function getSql(\Doctrine\ORM\Query\SqlWalker $sqlWalker)
     {
-        return sprintf('UUID_TO_BIN(%s)',
-            $sqlWalker->walkStringPrimary($this->uuidString));
+        return sprintf(
+            'UUID_TO_BIN(%s)',
+            $sqlWalker->walkStringPrimary($this->uuidString)
+        );
     }
 }

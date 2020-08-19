@@ -6,6 +6,8 @@ use App\Entity\PostLike;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Gregory\UuidToBinBundle\Doctrine\ORM\Query\UUID\Functions\UuidToBinFunction;
+use App\Entity\BlogPost;
+use App\Entity\User;
 
 /**
  * @method LikeConnection|null find($id, $lockMode = null, $lockVersion = null)
@@ -21,7 +23,7 @@ class PostLikeRepository extends ServiceEntityRepository
     }
 
     /**
-      * @return PostLike[] 
+      * @return PostLike[]
       */
     
     public function getLikeConnection($postId, $userId)
@@ -40,10 +42,11 @@ class PostLikeRepository extends ServiceEntityRepository
       * @return true if like connection with argument fields extists
       */
     
-      public function isLikeExtist($userId, $postId) : Bool
-      {
-        // $userIdBinary = 'UUID_TO_BIN('.$userId.')';
-        // $postIdBinary = 'UUID_TO_BIN('.$postId.')';
+    public function isLikeExtist(User $user, BlogPost $post) : Bool
+    {
+        $userId = $user->getId();
+
+        $postId = $post->getId();
 
         $likeConnection = $this->createQueryBuilder('l')
                                ->andWhere('l.post_id = UUID_TO_BIN(:postId)')
@@ -52,16 +55,19 @@ class PostLikeRepository extends ServiceEntityRepository
                                ->setParameter('userId', $userId)
                                ->getQuery()
                                ->getOneOrNullResult();
-        if ( $likeConnection != null ) {
+        if ($likeConnection != null) {
             return true;
         } else {
             return false;
         }
-          
-      }
+    }
 
-    public function writeLike(string $userId, string $postId) :Void
+    public function writeLike(User $user, BlogPost $post) :Void
     {
+        $userId = $user->getId();
+
+        $postId = $post->getId();
+
         $dbConnection = $this->getEntityManager()->getConnection();
 
         $sqlRequest = '
@@ -72,8 +78,12 @@ class PostLikeRepository extends ServiceEntityRepository
         $request->execute(['userId' => $userId, 'postId' => $postId]);
     }
 
-    public function removeLike(string $userId, string $postId) :Void
+    public function removeLike(User $user, BlogPost $post) :Void
     {
+        $userId = $user->getId();
+
+        $postId = $post->getId();
+
         $dbConnection = $this->getEntityManager()->getConnection();
 
         $sqlRequest = '
