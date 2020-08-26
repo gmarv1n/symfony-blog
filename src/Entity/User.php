@@ -8,15 +8,23 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\Table(name="users")
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
 class User implements UserInterface
 {
+    // /**
+    //  * @ORM\Id
+    //  * @ORM\Column(type="uuid_binary", unique=true)
+    //  * @ORM\GeneratedValue(strategy="CUSTOM")
+    //  * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+    //  */
+    // private $id;
+
     /**
      * @ORM\Id
-     * @ORM\Column(type="uuid_binary", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+     * @ORM\Column(type="guid", unique=true)
+     * @ORM\GeneratedValue(strategy="UUID")
      */
     private $id;
 

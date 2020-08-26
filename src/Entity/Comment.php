@@ -9,21 +9,28 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Comment
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="uuid_binary", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
-     */
-    private $id;
+    // /**
+    //  * @ORM\Id
+    //  * @ORM\Column(type="uuid_binary", unique=true)
+    //  * @ORM\GeneratedValue(strategy="CUSTOM")
+    //  * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+    //  */
+    // private $id;
 
     /**
-     * @ORM\Column(type="uuid_binary", nullable=false)
+     * @ORM\Id
+     * @ORM\Column(type="guid", unique=true)
+     * @ORM\GeneratedValue(strategy="UUID")
+     */
+     private $id;
+
+    /**
+     * @ORM\Column(type="guid", nullable=false)
      */
     private $author_id;
 
     /**
-     * @ORM\Column(type="uuid_binary", nullable=false)
+     * @ORM\Column(type="guid", nullable=false)
      */
     private $post_id;
 

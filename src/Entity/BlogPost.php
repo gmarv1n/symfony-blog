@@ -12,13 +12,20 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  */
 class BlogPost
 {
+    // /**
+    //  * @ORM\Id
+    //  * @ORM\Column(type="uuid_binary", unique=true)
+    //  * @ORM\GeneratedValue(strategy="CUSTOM")
+    //  * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+    //  */
+    // private $id;
+
     /**
      * @ORM\Id
-     * @ORM\Column(type="uuid_binary", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+     * @ORM\Column(type="guid", unique=true)
+     * @ORM\GeneratedValue(strategy="UUID")
      */
-    private $id;
+     private $id;
 
     /**
      * NOTE: This is not a mapped field of entity metadata, just a simple property.
@@ -82,7 +89,7 @@ class BlogPost
     private $author_nick;
 
     /**
-     * @ORM\Column(type="uuid_binary")
+     * @ORM\Column(type="guid")
      */
     private $author_id;
 

@@ -13,21 +13,28 @@ use Ramsey\Uuid\Uuid;
  */
 class PostLike
 {
+    // /**
+    //  * @ORM\Id
+    //  * @ORM\Column(type="uuid_binary", unique=true, options={"default"="uuid_binary()"})
+    //  * @ORM\GeneratedValue(strategy="CUSTOM")
+    //  * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+    //  */
+    // private $id;
+
     /**
      * @ORM\Id
-     * @ORM\Column(type="uuid_binary", unique=true, options={"default"="uuid_binary()"})
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+     * @ORM\Column(type="guid", unique=true)
+     * @ORM\GeneratedValue(strategy="UUID")
      */
-    private $id;
+     private $id;
     
     /**
-     * @ORM\Column(type="uuid_binary")
+     * @ORM\Column(type="guid")
      */
     private $user_id;
 
     /**
-     * @ORM\Column(type="uuid_binary")
+     * @ORM\Column(type="guid")
      */
     private $post_id;
 
